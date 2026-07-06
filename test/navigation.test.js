@@ -44,3 +44,12 @@ test('finds the shortest of multiple possible paths', async () => {
   // restroom-1 -> concourse-lower -> food-1 == 25 + 35
   assert.equal(res.totalDistanceMeters, 60);
 });
+
+test('wayfinding is available at the additional venues', async () => {
+  const sofi = await route({ venueId: 'usa-sofi', from: 'gate-1', to: 'sec-501', accessibleOnly: true });
+  assert.ok(sofi.steps.every((s) => s.accessible));
+  assert.match(sofi.directions, /Section 501/);
+
+  const azteca = await route({ venueId: 'mex-azteca', from: 'puerta-1', to: 'oracion' });
+  assert.match(azteca.directions, /Oración|Oracion|Prayer/);
+});

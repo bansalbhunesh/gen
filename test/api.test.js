@@ -98,3 +98,88 @@ test('security headers are applied by helmet', async () => {
   assert.ok(res.headers.get('content-security-policy'));
   assert.equal(res.headers.get('x-powered-by'), null);
 });
+
+test('every response carries a request id', async () => {
+  const res = await fetch(base + '/api/health');
+  assert.ok(res.headers.get('x-request-id'));
+});
+
+test('GET /api/metrics exposes AI counters', async () => {
+  const { status, body } = await call('/api/metrics');
+  assert.equal(status, 200);
+  assert.ok('modelCalls' in body.ai);
+  assert.ok(typeof body.cacheHitRate === 'number');
+});
+
+test('GET /api/matches lists fixtures', async () => {
+  const { status, body } = await call('/api/matches');
+  assert.equal(status, 200);
+  assert.ok(body.count >= 5);
+});
+
+test('GET /api/config/options returns enums for the UI', async () => {
+  const { status, body } = await call('/api/config/options');
+  assert.equal(status, 200);
+  assert.ok(body.incidentTypes.includes('medical'));
+  assert.ok(body.announcementScenarios.includes('gates-open'));
+});
+
+test('GET /api/openapi.json returns a spec', async () => {
+  const { status, body } = await call('/api/openapi.json');
+  assert.equal(status, 200);
+  assert.equal(body.openapi, '3.1.0');
+  assert.ok(body.paths['/incident']);
+});
+
+test('POST /api/sustainability/footprint ranks options', async () => {
+  const { status, body } = await call('/api/sustainability/footprint', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ distanceKm: 15, partySize: 3 }),
+  });
+  assert.equal(status, 200);
+  assert.equal(body.options[0].mode, body.greenest);
+});
+
+test('POST /api/incident triages and validates', async () => {
+  const ok = await call('/api/incident', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ type: 'medical', severity: 'high', zone: 'Sec 115' }),
+  });
+  assert.equal(ok.status, 200);
+  assert.ok(ok.body.priority);
+
+  const bad = await call('/api/incident', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ type: 'medical', severity: 'nope' }),
+  });
+  assert.equal(bad.status, 400);
+});
+
+test('POST /api/announce generates multilingual output', async () => {
+  const { status, body } = await call('/api/announce', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ scenario: 'gates-open', languages: ['en', 'es'] }),
+  });
+  assert.equal(status, 200);
+  assert.equal(body.languages.length, 2);
+});
+
+test('GET /api/plan/:venueId returns a match-day plan', async () => {
+  const { status, body } = await call('/api/plan/usa-metlife?travelMinutes=30');
+  assert.equal(status, 200);
+  assert.ok('recommendedArriveBy' in body || body.match === null);
+});
+
+test('bounded body: oversized JSON is rejected', async () => {
+  const huge = JSON.stringify({ question: 'x'.repeat(20_000) });
+  const res = await fetch(base + '/api/concierge', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: huge,
+  });
+  assert.equal(res.status, 413);
+});

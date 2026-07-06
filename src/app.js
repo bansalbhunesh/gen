@@ -14,6 +14,7 @@ import { dirname, join } from 'node:path';
 
 import config from './config.js';
 import apiRouter from './routes/index.js';
+import { requestId } from './middleware/requestId.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 const publicDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'public');
@@ -25,6 +26,9 @@ export function createApp() {
   // load balancer, without trusting the whole chain.
   app.set('trust proxy', 1);
   app.disable('x-powered-by');
+
+  // Correlate every request/response with an id.
+  app.use(requestId);
 
   // --- Security headers ---------------------------------------------------
   app.use(

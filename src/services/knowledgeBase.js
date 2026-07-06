@@ -19,6 +19,8 @@ function load(name) {
 
 const venuesData = load('venues.json');
 const knowledgeData = load('knowledge.json');
+const scheduleData = load('schedule.json');
+const sustainabilityData = load('sustainability.json');
 
 const venuesById = new Map(venuesData.venues.map((v) => [v.id, v]));
 
@@ -26,10 +28,37 @@ export const tournament = venuesData.tournament;
 export const venues = venuesData.venues;
 export const zones = venuesData.zones;
 export const knowledgeEntries = knowledgeData.entries;
+export const matches = scheduleData.matches;
+export const emissionModes = sustainabilityData.modes;
+export const sustainabilityTips = sustainabilityData.tips;
 
 /** @param {string} id */
 export function getVenue(id) {
   return venuesById.get(id) || null;
+}
+
+/** @param {string} venueId */
+export function getMatchesForVenue(venueId) {
+  return matches.filter((m) => m.venueId === venueId);
+}
+
+/**
+ * Next scheduled match at or after a reference time.
+ * @param {Date} [now]
+ * @param {string} [venueId] optionally restrict to a venue
+ */
+export function getNextMatch(now = new Date(), venueId) {
+  const pool = venueId ? getMatchesForVenue(venueId) : matches;
+  return (
+    pool
+      .filter((m) => new Date(m.kickoff).getTime() >= now.getTime())
+      .sort((a, b) => new Date(a.kickoff) - new Date(b.kickoff))[0] || null
+  );
+}
+
+/** @param {string} id */
+export function getEmissionMode(id) {
+  return emissionModes.find((m) => m.id === id) || null;
 }
 
 /** @param {string} id */
@@ -85,7 +114,13 @@ export default {
   venues,
   zones,
   knowledgeEntries,
+  matches,
+  emissionModes,
+  sustainabilityTips,
   getVenue,
   getZoneGraph,
+  getMatchesForVenue,
+  getNextMatch,
+  getEmissionMode,
   searchKnowledge,
 };

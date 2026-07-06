@@ -212,6 +212,60 @@
         { "from": "concourse-upper", "to": "sec-320", "distance": 40, "accessible": true },
         { "from": "concourse-lower", "to": "concourse-upper", "distance": 70, "accessible": false, "note": "stairs only" }
       ]
+    },
+    "usa-sofi": {
+      "nodes": [
+        { "id": "gate-1", "label": "Entry Gate 1 (American Airlines Plaza)", "type": "entrance", "level": 0 },
+        { "id": "gate-3", "label": "Entry Gate 3 (Via Toll Plaza)", "type": "entrance", "level": 0 },
+        { "id": "concourse", "label": "Main Concourse", "type": "concourse", "level": 1 },
+        { "id": "sec-201", "label": "Section 201", "type": "seating", "level": 1 },
+        { "id": "sec-501", "label": "Section 501 (Upper)", "type": "seating", "level": 5 },
+        { "id": "restroom", "label": "Restroom (near Section 201)", "type": "restroom", "level": 1 },
+        { "id": "food", "label": "Food Hall", "type": "food", "level": 1 },
+        { "id": "firstaid", "label": "First Aid", "type": "first-aid", "level": 1 },
+        { "id": "sensory", "label": "Sensory Room", "type": "sensory-room", "level": 1 },
+        { "id": "nursing", "label": "Nursing Room", "type": "nursing-room", "level": 1 },
+        { "id": "elevator", "label": "Accessible Elevator", "type": "elevator", "level": 0 }
+      ],
+      "edges": [
+        { "from": "gate-1", "to": "concourse", "distance": 55, "accessible": true },
+        { "from": "gate-3", "to": "concourse", "distance": 70, "accessible": true },
+        { "from": "concourse", "to": "sec-201", "distance": 45, "accessible": true },
+        { "from": "concourse", "to": "restroom", "distance": 20, "accessible": true },
+        { "from": "concourse", "to": "food", "distance": 30, "accessible": true },
+        { "from": "concourse", "to": "firstaid", "distance": 35, "accessible": true },
+        { "from": "concourse", "to": "sensory", "distance": 50, "accessible": true },
+        { "from": "concourse", "to": "nursing", "distance": 48, "accessible": true },
+        { "from": "concourse", "to": "elevator", "distance": 25, "accessible": true },
+        { "from": "elevator", "to": "sec-501", "distance": 30, "accessible": true },
+        { "from": "concourse", "to": "sec-501", "distance": 90, "accessible": false, "note": "escalator/stairs" }
+      ]
+    },
+    "mex-azteca": {
+      "nodes": [
+        { "id": "puerta-1", "label": "Puerta 1 (Norte)", "type": "entrance", "level": 0 },
+        { "id": "puerta-8", "label": "Puerta 8 (Sur)", "type": "entrance", "level": 0 },
+        { "id": "explanada", "label": "Explanada / Main Concourse", "type": "concourse", "level": 1 },
+        { "id": "sec-general", "label": "Cabecera Sur (Section)", "type": "seating", "level": 1 },
+        { "id": "sec-palcos", "label": "Palcos (Upper)", "type": "seating", "level": 3 },
+        { "id": "sanitarios", "label": "Sanitarios (Restroom)", "type": "restroom", "level": 1 },
+        { "id": "comida", "label": "Zona de Comida (Food)", "type": "food", "level": 1 },
+        { "id": "primeros-auxilios", "label": "Primeros Auxilios (First Aid)", "type": "first-aid", "level": 1 },
+        { "id": "oracion", "label": "Sala de Oración (Prayer Room)", "type": "prayer-room", "level": 1 },
+        { "id": "elevador", "label": "Elevador Accesible", "type": "elevator", "level": 0 }
+      ],
+      "edges": [
+        { "from": "puerta-1", "to": "explanada", "distance": 65, "accessible": true },
+        { "from": "puerta-8", "to": "explanada", "distance": 75, "accessible": true },
+        { "from": "explanada", "to": "sec-general", "distance": 40, "accessible": true },
+        { "from": "explanada", "to": "sanitarios", "distance": 25, "accessible": true },
+        { "from": "explanada", "to": "comida", "distance": 30, "accessible": true },
+        { "from": "explanada", "to": "primeros-auxilios", "distance": 35, "accessible": true },
+        { "from": "explanada", "to": "oracion", "distance": 45, "accessible": true },
+        { "from": "explanada", "to": "elevador", "distance": 22, "accessible": true },
+        { "from": "elevador", "to": "sec-palcos", "distance": 28, "accessible": true },
+        { "from": "explanada", "to": "sec-palcos", "distance": 80, "accessible": false, "note": "stairs only" }
+      ]
     }
   }
 }
