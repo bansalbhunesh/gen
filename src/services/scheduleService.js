@@ -43,7 +43,11 @@ export async function planMatchDay({ venueId, travelMinutes = 45, now = new Date
   const arriveBy = new Date(kickoff.getTime() - GATES_OPEN_BEFORE_MIN * 60_000);
   const departBy = new Date(arriveBy.getTime() - travel * 60_000);
   const fmt = (d) =>
-    d.toLocaleString('en-US', { timeZone: venue.timezone, dateStyle: 'medium', timeStyle: 'short' });
+    d.toLocaleString('en-US', {
+      timeZone: venue.timezone,
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    });
 
   const { text, source } = await generate({
     system:

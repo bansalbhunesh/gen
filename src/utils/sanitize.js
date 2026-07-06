@@ -11,7 +11,9 @@
  */
 
 // Strip ASCII control characters (but keep tab/newline/carriage-return, which
-// are collapsed into single spaces below).
+// are collapsed into single spaces below). Control chars are matched
+// deliberately here — that is the whole point of the sanitiser.
+// eslint-disable-next-line no-control-regex
 const CONTROL_CHARS = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g;
 
 // Common jailbreak / role-override markers. Matched case-insensitively and

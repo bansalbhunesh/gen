@@ -1,7 +1,8 @@
 /**
  * API router. Mounts every feature route under a single versioned prefix and
  * provides the shared async-handler wrapper so route bodies can `await`
- * services without repetitive try/catch.
+ * services without repetitive try/catch. All input passes through the
+ * validators in ../middleware/validate.js before reaching a service.
  */
 import { Router } from 'express';
 import { ask } from '../services/conciergeService.js';
@@ -13,8 +14,23 @@ import { triage, INCIDENT_TYPES, SEVERITIES } from '../services/incidentService.
 import { announce, SCENARIOS } from '../services/announcementService.js';
 import { listMatches, planMatchDay } from '../services/scheduleService.js';
 import { metrics } from '../services/aiService.js';
-import { venues, tournament, getVenue, getZoneGraph, emissionModes } from '../services/knowledgeBase.js';
-import { requireString, optionalString, requireEnum } from '../middleware/validate.js';
+import {
+  venues,
+  tournament,
+  getVenue,
+  getZoneGraph,
+  emissionModes,
+} from '../services/knowledgeBase.js';
+import {
+  ApiError,
+  requireString,
+  optionalString,
+  requireEnum,
+  requireNumber,
+  optionalNumber,
+  optionalStringArray,
+  toBoolean,
+} from '../middleware/validate.js';
 import { openapi } from './openapi.js';
 import config from '../config.js';
 
@@ -56,7 +72,7 @@ router.get('/venues', (req, res) => {
 
 router.get('/venues/:id', (req, res) => {
   const venue = getVenue(req.params.id);
-  if (!venue) return res.status(404).json({ error: `Unknown venue "${req.params.id}"` });
+  if (!venue) throw new ApiError(`Unknown venue "${req.params.id}"`, 404, 'not_found');
   const graph = getZoneGraph(venue.id);
   const wayfindingNodes = graph
     ? graph.nodes.map(({ id, label, type }) => ({ id, label, type }))
@@ -101,7 +117,7 @@ router.post(
     const venueId = requireString(req.body?.venueId, 'venueId', 64);
     const from = requireString(req.body?.from, 'from', 64);
     const to = requireString(req.body?.to, 'to', 64);
-    const accessibleOnly = Boolean(req.body?.accessibleOnly);
+    const accessibleOnly = toBoolean(req.body?.accessibleOnly);
     res.json(await findRoute({ venueId, from, to, accessibleOnly }));
   }),
 );
@@ -129,16 +145,14 @@ router.post(
 router.post(
   '/sustainability/footprint',
   wrap(async (req, res) => {
-    const modes = Array.isArray(req.body?.modes)
-      ? req.body.modes.filter((m) => typeof m === 'string').slice(0, 20)
-      : undefined;
-    res.json(
-      await footprint({
-        distanceKm: req.body?.distanceKm,
-        partySize: req.body?.partySize,
-        modes,
-      }),
-    );
+    const distanceKm = requireNumber(req.body?.distanceKm, 'distanceKm', { min: 0.1, max: 20_000 });
+    const partySize = optionalNumber(req.body?.partySize, 'partySize', {
+      min: 1,
+      max: 60,
+      integer: true,
+    });
+    const modes = optionalStringArray(req.body?.modes, 'modes');
+    res.json(await footprint({ distanceKm, partySize, modes }));
   }),
 );
 
@@ -161,9 +175,7 @@ router.post(
   wrap(async (req, res) => {
     const message = optionalString(req.body?.message, 'message', 500);
     const scenario = optionalString(req.body?.scenario, 'scenario', 40);
-    const languages = Array.isArray(req.body?.languages)
-      ? req.body.languages.filter((l) => typeof l === 'string').slice(0, 20)
-      : undefined;
+    const languages = optionalStringArray(req.body?.languages, 'languages');
     res.json(await announce({ message, scenario, languages }));
   }),
 );
@@ -172,13 +184,11 @@ router.post(
 router.get(
   '/plan/:venueId',
   wrap(async (req, res) => {
-    const travelMinutes = Number(req.query?.travelMinutes);
-    res.json(
-      await planMatchDay({
-        venueId: req.params.venueId,
-        travelMinutes: Number.isFinite(travelMinutes) ? travelMinutes : undefined,
-      }),
-    );
+    const travelMinutes = optionalNumber(req.query?.travelMinutes, 'travelMinutes', {
+      min: 0,
+      max: 480,
+    });
+    res.json(await planMatchDay({ venueId: req.params.venueId, travelMinutes }));
   }),
 );
 

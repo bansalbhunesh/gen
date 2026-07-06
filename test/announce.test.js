@@ -20,7 +20,10 @@ test('supports a custom message over a scenario', async () => {
 
 test('filters unsupported languages and de-duplicates', async () => {
   const res = await announce({ scenario: 'delay', languages: ['en', 'en', 'zz'] });
-  assert.deepEqual(res.languages.map((l) => l.language), ['en']);
+  assert.deepEqual(
+    res.languages.map((l) => l.language),
+    ['en'],
+  );
 });
 
 test('defaults to en/es/fr when no languages given', async () => {
@@ -29,6 +32,12 @@ test('defaults to en/es/fr when no languages given', async () => {
 });
 
 test('rejects when neither message nor known scenario is supplied', async () => {
-  await assert.rejects(() => announce({}), (e) => e.status === 400);
-  await assert.rejects(() => announce({ scenario: 'nope' }), (e) => e.status === 400);
+  await assert.rejects(
+    () => announce({}),
+    (e) => e.status === 400,
+  );
+  await assert.rejects(
+    () => announce({ scenario: 'nope' }),
+    (e) => e.status === 400,
+  );
 });

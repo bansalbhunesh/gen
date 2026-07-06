@@ -6,7 +6,8 @@ on:
   pull_request:
 
 jobs:
-  test:
+  quality:
+    name: Lint, format & unit tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,8 +24,36 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Syntax check
+      - name: Lint
         run: npm run lint
 
-      - name: Run tests
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Unit & integration tests
         run: npm test
+
+      - name: Dependency audit (high severity)
+        run: npm audit --omit=dev --audit-level=high
+        continue-on-error: true
+
+  e2e:
+    name: E2E + accessibility (axe-core)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E + accessibility suite
+        run: npm run test:e2e

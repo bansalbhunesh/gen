@@ -183,3 +183,49 @@ test('bounded body: oversized JSON is rejected', async () => {
   });
   assert.equal(res.status, 413);
 });
+
+test('non-JSON POST is rejected with 415 and a code', async () => {
+  const res = await fetch(base + '/api/concierge', {
+    method: 'POST',
+    headers: { 'content-type': 'text/plain' },
+    body: 'hello',
+  });
+  const body = await res.json();
+  assert.equal(res.status, 415);
+  assert.equal(body.code, 'unsupported_media_type');
+});
+
+test('malformed JSON is rejected with 400 invalid_json', async () => {
+  const res = await fetch(base + '/api/concierge', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: '{ not valid',
+  });
+  const body = await res.json();
+  assert.equal(res.status, 400);
+  assert.equal(body.code, 'invalid_json');
+});
+
+test('error responses carry a code and the request id', async () => {
+  const { body } = await call('/api/venues/does-not-exist');
+  assert.equal(body.code, 'not_found');
+  assert.ok(body.requestId);
+});
+
+test('validation errors expose a machine-readable code', async () => {
+  const res = await fetch(base + '/api/sustainability/footprint', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ distanceKm: -1 }),
+  });
+  const body = await res.json();
+  assert.equal(res.status, 400);
+  assert.equal(body.code, 'validation_error');
+});
+
+test('security response headers are present', async () => {
+  const res = await fetch(base + '/');
+  assert.ok(res.headers.get('permissions-policy'));
+  assert.equal(res.headers.get('referrer-policy'), 'no-referrer');
+  assert.ok(res.headers.get('strict-transport-security'));
+});

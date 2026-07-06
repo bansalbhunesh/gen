@@ -13,7 +13,12 @@
     "test": "NODE_ENV=test node --test",
     "test:coverage": "NODE_ENV=test node --test --experimental-test-coverage",
     "test:watch": "NODE_ENV=test node --test --watch",
-    "lint": "node --check src/server.js && echo \"syntax OK\""
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{js,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.js\" \"public/**/*.js\" \"test/**/*.js\"",
+    "test:e2e": "node e2e/a11y.mjs",
+    "check": "npm run lint && npm run format:check && npm test"
   },
   "keywords": [
     "genai",
@@ -35,6 +40,12 @@
     "helmet": "^8.0.0"
   },
   "devDependencies": {
-    "playwright-core": "^1.61.1"
+    "@eslint/js": "^10.0.1",
+    "axe-core": "^4.12.1",
+    "eslint": "^10.6.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.7.0",
+    "playwright-core": "^1.61.1",
+    "prettier": "^3.9.4"
   }
 }

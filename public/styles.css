@@ -14,6 +14,11 @@
   --danger: #ff6b6b;
   --warn: #ffb703;
   --ok: #52c41a;
+  /* Button + status-text colours, tuned per theme for WCAG-AA contrast. */
+  --btn-bg: #00b2a9;
+  --btn-fg: #04201e;
+  --badge-warn: #ffb703;
+  --badge-ok: #52c41a;
   --radius: 12px;
   --maxw: 780px;
 }
@@ -28,6 +33,10 @@
     --accent: #007e78;
     --accent-strong: #00605b;
     --focus: #9a6b00;
+    --btn-bg: #00605b;
+    --btn-fg: #ffffff;
+    --badge-warn: #8a5300;
+    --badge-ok: #1a7a1a;
   }
 }
 
@@ -40,6 +49,9 @@ body {
   color: var(--text);
   line-height: 1.55;
 }
+
+a { color: var(--accent-strong); text-decoration: underline; }
+a:hover { text-decoration: none; }
 
 /* Accessibility helpers */
 .skip-link {
@@ -92,8 +104,8 @@ body {
   color: var(--text-muted);
   border: 1px solid transparent;
 }
-.badge.model { color: var(--ok); border-color: var(--ok); }
-.badge.offline { color: var(--warn); border-color: var(--warn); }
+.badge.model { color: var(--badge-ok); border-color: var(--badge-ok); }
+.badge.offline { color: var(--badge-warn); border-color: var(--badge-warn); }
 
 /* Tabs */
 .tabs {
@@ -147,8 +159,8 @@ textarea { resize: vertical; }
 button.primary {
   margin-top: 0.75rem;
   align-self: flex-start;
-  background: var(--accent);
-  color: #04201e;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
   font-weight: 700;
   border: none;
   border-radius: 8px;
@@ -156,7 +168,7 @@ button.primary {
   font-size: 1rem;
   cursor: pointer;
 }
-button.primary:hover { background: var(--accent-strong); }
+button.primary:hover { filter: brightness(1.08); }
 button.primary:disabled { opacity: 0.6; cursor: progress; }
 
 /* Results */
@@ -214,7 +226,7 @@ button.primary:disabled { opacity: 0.6; cursor: progress; }
   cursor: pointer;
 }
 .chip:hover { border-color: var(--accent-strong); }
-.chip[aria-pressed="true"] { background: var(--accent); color: #04201e; font-weight: 700; }
+.chip[aria-pressed="true"] { background: var(--btn-bg); color: var(--btn-fg); font-weight: 700; }
 
 .langset { border: 1px solid var(--surface-2); border-radius: 8px; padding: 0.5rem 0.75rem; margin: 0.25rem 0; }
 .langset legend { padding: 0 0.4rem; font-weight: 600; }
@@ -223,10 +235,12 @@ button.primary:disabled { opacity: 0.6; cursor: progress; }
 
 /* Priority badges */
 .pill { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-weight: 700; font-size: 0.8rem; }
-.pill.P1, .pill.critical { background: var(--danger); color: #fff; }
-.pill.P2, .pill.high { background: var(--warn); color: #201500; }
-.pill.P3, .pill.moderate { background: var(--accent-strong); color: #04201e; }
-.pill.P4, .pill.low { background: var(--ok); color: #04200a; }
+/* Pill backgrounds are fixed (not theme variables) and paired with text that
+   clears WCAG-AA contrast in both light and dark themes. */
+.pill.P1, .pill.critical { background: #c62828; color: #fff; }
+.pill.P2, .pill.high { background: #ffb703; color: #201500; }
+.pill.P3, .pill.moderate { background: #0e7490; color: #fff; }
+.pill.P4, .pill.low { background: #52c41a; color: #04200a; }
 
 .action-list { margin: 0.5rem 0 0; padding-left: 1.2rem; }
 .action-list li { margin: 0.2rem 0; }
@@ -259,6 +273,23 @@ button.primary:disabled { opacity: 0.6; cursor: progress; }
 .timeline li { position: relative; padding: 0 0 0.6rem 0.8rem; }
 .timeline li::before { content: ""; position: absolute; left: -1.35rem; top: 0.3rem; width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--accent-strong); }
 .timeline .t { font-weight: 700; }
+
+/* Honour an explicit user request for more contrast. */
+@media (prefers-contrast: more) {
+  :root { --text-muted: var(--text); }
+  select, textarea, input, .chip, .zone-card { border-color: var(--text) !important; }
+  :focus-visible { outline-width: 4px; }
+}
+
+/* Windows High Contrast / forced-colors: let the OS palette take over and keep
+   non-text UI (bars, route lines) perceivable via system colours. */
+@media (forced-colors: active) {
+  .badge, .pill, .chip { border: 1px solid; }
+  .bar > span, .rbar > span { background: Highlight; }
+  .route-map .edge { stroke: CanvasText; }
+  .route-map .node { stroke: CanvasText; fill: Canvas; }
+  :focus-visible { outline: 3px solid Highlight; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }

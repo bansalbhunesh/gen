@@ -10,6 +10,13 @@ test('produces a full zone snapshot for a valid venue', async () => {
   assert.ok(typeof res.recommendations === 'string' && res.recommendations.length > 0);
 });
 
+test('gives a calm "flowing normally" recommendation when there are no hotspots', async () => {
+  // Deterministic seed "q2" yields an all-low snapshot with zero hotspots.
+  const res = await snapshot({ venueId: 'usa-metlife', timeBucket: 'q2' });
+  assert.equal(res.hotspots.length, 0);
+  assert.match(res.recommendations, /flowing normally|maintain standard staffing/);
+});
+
 test('is deterministic for the same venue and time bucket', async () => {
   const a = await snapshot({ venueId: 'usa-att', timeBucket: 'bucket-x' });
   const b = await snapshot({ venueId: 'usa-att', timeBucket: 'bucket-x' });

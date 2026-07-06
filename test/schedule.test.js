@@ -43,5 +43,8 @@ test('handles a venue with no upcoming fixtures gracefully', async () => {
 });
 
 test('rejects an unknown venue', async () => {
-  await assert.rejects(() => planMatchDay({ venueId: 'ghost' }), (e) => e.status === 404);
+  await assert.rejects(
+    () => planMatchDay({ venueId: 'ghost' }),
+    (e) => e.status === 404,
+  );
 });

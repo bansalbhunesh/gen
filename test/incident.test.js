@@ -24,13 +24,24 @@ test('higher severity never yields a less urgent priority', async () => {
 });
 
 test('produces actionable steps and includes venue context', async () => {
-  const res = await triage({ venueId: 'usa-sofi', type: 'crowd-surge', severity: 'high', zone: 'Gate 1' });
+  const res = await triage({
+    venueId: 'usa-sofi',
+    type: 'crowd-surge',
+    severity: 'high',
+    zone: 'Gate 1',
+  });
   assert.ok(res.actions.length >= 2);
   assert.equal(res.venue.id, 'usa-sofi');
   assert.match(res.brief, /Gate 1/);
 });
 
 test('rejects unknown type or severity', async () => {
-  await assert.rejects(() => triage({ type: 'alien', severity: 'high' }), (e) => e.status === 400);
-  await assert.rejects(() => triage({ type: 'medical', severity: 'apocalyptic' }), (e) => e.status === 400);
+  await assert.rejects(
+    () => triage({ type: 'alien', severity: 'high' }),
+    (e) => e.status === 400,
+  );
+  await assert.rejects(
+    () => triage({ type: 'medical', severity: 'apocalyptic' }),
+    (e) => e.status === 400,
+  );
 });

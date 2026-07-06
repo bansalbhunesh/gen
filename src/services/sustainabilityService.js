@@ -40,9 +40,7 @@ export async function footprint({ distanceKm, partySize = 1, modes }) {
       // Per-vehicle modes scale with the vehicle, not the party; per-passenger
       // modes scale with the number of travellers.
       const perVehicle = mode.id === SOLO_CAR;
-      const totalGrams = perVehicle
-        ? mode.gramsCO2ePerKm * km
-        : mode.gramsCO2ePerKm * km * party;
+      const totalGrams = perVehicle ? mode.gramsCO2ePerKm * km : mode.gramsCO2ePerKm * km * party;
       return {
         mode: mode.id,
         label: mode.label,
@@ -53,13 +51,10 @@ export async function footprint({ distanceKm, partySize = 1, modes }) {
     .sort((a, b) => a.totalKgCO2e - b.totalKgCO2e);
 
   const greenest = options[0];
-  const baseline =
-    options.find((o) => o.mode === SOLO_CAR) || options[options.length - 1];
+  const baseline = options.find((o) => o.mode === SOLO_CAR) || options[options.length - 1];
   const savingKg = Number((baseline.totalKgCO2e - greenest.totalKgCO2e).toFixed(2));
   const savingPct =
-    baseline.totalKgCO2e > 0
-      ? Math.round((savingKg / baseline.totalKgCO2e) * 100)
-      : 0;
+    baseline.totalKgCO2e > 0 ? Math.round((savingKg / baseline.totalKgCO2e) * 100) : 0;
 
   const { text, source } = await generate({
     system:

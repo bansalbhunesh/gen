@@ -41,7 +41,12 @@ const config = Object.freeze({
   rateLimit: Object.freeze({
     windowMs: toInt(process.env.RATE_LIMIT_WINDOW_MS, 60_000),
     max: toInt(process.env.RATE_LIMIT_MAX, 60),
+    // Stricter budget for GenAI endpoints, which are more expensive to serve.
+    aiMax: toInt(process.env.RATE_LIMIT_AI_MAX, 20),
   }),
+
+  // Maximum accepted JSON body size.
+  bodyLimit: process.env.BODY_LIMIT || '16kb',
 });
 
 export default config;

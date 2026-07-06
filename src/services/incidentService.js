@@ -100,14 +100,35 @@ export async function triage({ venueId, type, severity, zone, detail }) {
 function baseActions(type, severity, zone, escalate) {
   const at = zone ? `at ${zone}` : 'at the location';
   const common = {
-    medical: [`Send paramedics with an AED ${at}.`, 'Clear a path for a stretcher and keep bystanders back.'],
-    'crowd-surge': [`Open additional flow lanes ${at} and pause inbound movement.`, 'Use PA to calm and redirect the crowd.'],
-    'lost-person': ['Broadcast a description to all stewards.', 'Direct the reporting party to the nearest Guest Services desk.'],
+    medical: [
+      `Send paramedics with an AED ${at}.`,
+      'Clear a path for a stretcher and keep bystanders back.',
+    ],
+    'crowd-surge': [
+      `Open additional flow lanes ${at} and pause inbound movement.`,
+      'Use PA to calm and redirect the crowd.',
+    ],
+    'lost-person': [
+      'Broadcast a description to all stewards.',
+      'Direct the reporting party to the nearest Guest Services desk.',
+    ],
     security: [`Contain and isolate the area ${at}.`, 'Coordinate with on-site law enforcement.'],
-    fire: [`Initiate zonal evacuation ${at}.`, 'Confirm fire service is en route and hold nearby lifts.'],
-    weather: ['Move fans under cover and monitor alerts.', 'Prepare a possible play-suspension message.'],
-    infrastructure: [`Cordon the affected area ${at}.`, 'Dispatch engineering to assess and make safe.'],
-    accessibility: [`Send accessibility services ${at}.`, 'Offer step-free routing and companion assistance.'],
+    fire: [
+      `Initiate zonal evacuation ${at}.`,
+      'Confirm fire service is en route and hold nearby lifts.',
+    ],
+    weather: [
+      'Move fans under cover and monitor alerts.',
+      'Prepare a possible play-suspension message.',
+    ],
+    infrastructure: [
+      `Cordon the affected area ${at}.`,
+      'Dispatch engineering to assess and make safe.',
+    ],
+    accessibility: [
+      `Send accessibility services ${at}.`,
+      'Offer step-free routing and companion assistance.',
+    ],
   }[type];
 
   const actions = [...common];

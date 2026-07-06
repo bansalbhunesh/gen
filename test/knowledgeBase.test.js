@@ -1,11 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import {
-  searchKnowledge,
-  getVenue,
-  getZoneGraph,
-  venues,
-} from '../src/services/knowledgeBase.js';
+import { searchKnowledge, getVenue, getZoneGraph, venues } from '../src/services/knowledgeBase.js';
 
 test('loads all 16 host venues', () => {
   assert.equal(venues.length, 16);

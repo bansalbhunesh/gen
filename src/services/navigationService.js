@@ -153,11 +153,12 @@ function buildDirectionsPrompt(venue, steps, accessibleOnly) {
 
 /** @param {Array<object>} steps @param {boolean} accessibleOnly */
 function offlineDirections(steps, accessibleOnly) {
-  const intro = accessibleOnly
-    ? 'Here is your step-free route:'
-    : 'Here is your route:';
+  const intro = accessibleOnly ? 'Here is your step-free route:' : 'Here is your route:';
   const body = steps
-    .map((s, i) => `${i + 1}. Head to ${s.to} — about ${s.distanceMeters} m${s.accessible ? '' : ' (stairs)'}.`)
+    .map(
+      (s, i) =>
+        `${i + 1}. Head to ${s.to} — about ${s.distanceMeters} m${s.accessible ? '' : ' (stairs)'}.`,
+    )
     .join(' ');
   return `${intro} ${body} You have arrived. Ask any steward in a purple vest if you need help.`;
 }

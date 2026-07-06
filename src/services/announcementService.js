@@ -11,13 +11,20 @@ import { translate, LANGUAGES } from './translationService.js';
 
 /** Ready-made, plain-language templates for the most common venue scenarios. */
 export const SCENARIOS = {
-  'gates-open': 'Gates are now open. Please have your mobile ticket ready and follow signage to your gate.',
-  delay: 'Kickoff is delayed by a short period. Please remain in your seats; we will update you shortly. Thank you for your patience.',
-  'weather-hold': 'For your safety, play is temporarily paused due to weather. Please move to covered areas and await further instructions.',
-  'lost-child': 'A young supporter is being cared for at Guest Services. If you are missing a child, please go to the nearest Guest Services desk.',
-  evacuation: 'Please leave the stadium calmly using the nearest available exit. Follow the directions of stewards. Do not run.',
-  'final-whistle': 'Thank you for joining us. Please exit calmly; transit and shuttle services are running from the signposted areas.',
-  accessibility: 'Step-free routes and accessibility assistance are available. Please ask any steward in a purple vest for help.',
+  'gates-open':
+    'Gates are now open. Please have your mobile ticket ready and follow signage to your gate.',
+  delay:
+    'Kickoff is delayed by a short period. Please remain in your seats; we will update you shortly. Thank you for your patience.',
+  'weather-hold':
+    'For your safety, play is temporarily paused due to weather. Please move to covered areas and await further instructions.',
+  'lost-child':
+    'A young supporter is being cared for at Guest Services. If you are missing a child, please go to the nearest Guest Services desk.',
+  evacuation:
+    'Please leave the stadium calmly using the nearest available exit. Follow the directions of stewards. Do not run.',
+  'final-whistle':
+    'Thank you for joining us. Please exit calmly; transit and shuttle services are running from the signposted areas.',
+  accessibility:
+    'Step-free routes and accessibility assistance are available. Please ask any steward in a purple vest for help.',
 };
 
 /**

@@ -10,7 +10,14 @@
 import { generate } from './aiService.js';
 import { getVenue } from './knowledgeBase.js';
 
-const ZONES = ['North Gate', 'East Gate', 'Lower Concourse', 'Upper Concourse', 'Transit Hub', 'Food Court'];
+const ZONES = [
+  'North Gate',
+  'East Gate',
+  'Lower Concourse',
+  'Upper Concourse',
+  'Transit Hub',
+  'Food Court',
+];
 
 /** Density band thresholds (occupancy ratio 0..1). */
 function band(ratio) {
@@ -91,7 +98,9 @@ function currentBucket() {
 }
 
 function buildOpsPrompt(venue, zones, overall) {
-  const lines = zones.map((z) => `- ${z.zone}: ${Math.round(z.occupancy * 100)}% (${z.status})`).join('\n');
+  const lines = zones
+    .map((z) => `- ${z.zone}: ${Math.round(z.occupancy * 100)}% (${z.status})`)
+    .join('\n');
   return `Venue: ${venue.name} (capacity ${venue.capacity}). Overall: ${overall}.\nZone density:\n${lines}`;
 }
 
@@ -102,12 +111,11 @@ function offlineRecommendations(zones, hotspots, overall) {
   }
   const recs = hotspots.map((z, i) => {
     const pct = Math.round(z.occupancy * 100);
-    const action =
-      z.zone.includes('Gate')
-        ? `open additional lanes and redirect arrivals to the nearest quieter gate`
-        : z.zone.includes('Transit')
-          ? `stagger egress messaging and hold fans in concourse lounges for 10 minutes`
-          : `deploy stewards to ease flow and open overflow routes`;
+    const action = z.zone.includes('Gate')
+      ? `open additional lanes and redirect arrivals to the nearest quieter gate`
+      : z.zone.includes('Transit')
+        ? `stagger egress messaging and hold fans in concourse lounges for 10 minutes`
+        : `deploy stewards to ease flow and open overflow routes`;
     return `${i + 1}. ${z.zone} at ${pct}% (${z.status}) — ${action}.`;
   });
   return `Priority actions (overall ${overall}): ${recs.join(' ')}`;

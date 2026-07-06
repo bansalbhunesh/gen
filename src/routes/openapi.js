@@ -8,8 +8,7 @@ export const openapi = {
   info: {
     title: 'StadiumIQ 2026 API',
     version: '1.0.0',
-    description:
-      'GenAI stadium operations & fan-experience API for the FIFA World Cup 2026.',
+    description: 'GenAI stadium operations & fan-experience API for the FIFA World Cup 2026.',
     license: { name: 'MIT' },
   },
   servers: [{ url: '/api' }],
@@ -19,14 +18,22 @@ export const openapi = {
     '/tournament': { get: { summary: 'Tournament metadata + languages', responses: ok() } },
     '/venues': { get: { summary: 'List all host venues', responses: ok() } },
     '/venues/{id}': {
-      get: { summary: 'Venue detail + wayfinding nodes', parameters: [pathParam('id')], responses: ok() },
+      get: {
+        summary: 'Venue detail + wayfinding nodes',
+        parameters: [pathParam('id')],
+        responses: ok(),
+      },
     },
     '/matches': { get: { summary: 'List sample fixtures', responses: ok() } },
     '/concierge': {
       post: { summary: 'Multilingual fan Q&A', requestBody: body(['question']), responses: ok() },
     },
     '/navigate': {
-      post: { summary: 'In-stadium wayfinding', requestBody: body(['venueId', 'from', 'to']), responses: ok() },
+      post: {
+        summary: 'In-stadium wayfinding',
+        requestBody: body(['venueId', 'from', 'to']),
+        responses: ok(),
+      },
     },
     '/crowd/{venueId}': {
       get: { summary: 'Crowd & ops snapshot', parameters: [pathParam('venueId')], responses: ok() },
@@ -35,10 +42,18 @@ export const openapi = {
       post: { summary: 'Translate text', requestBody: body(['text', 'target']), responses: ok() },
     },
     '/sustainability/footprint': {
-      post: { summary: 'Travel carbon footprint', requestBody: body(['distanceKm']), responses: ok() },
+      post: {
+        summary: 'Travel carbon footprint',
+        requestBody: body(['distanceKm']),
+        responses: ok(),
+      },
     },
     '/incident': {
-      post: { summary: 'Real-time incident triage', requestBody: body(['type', 'severity']), responses: ok() },
+      post: {
+        summary: 'Real-time incident triage',
+        requestBody: body(['type', 'severity']),
+        responses: ok(),
+      },
     },
     '/announce': {
       post: { summary: 'Multilingual PA announcement', requestBody: body([]), responses: ok() },

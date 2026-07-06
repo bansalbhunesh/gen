@@ -28,9 +28,18 @@ test('computes a positive saving versus the baseline', async () => {
 });
 
 test('rejects invalid distance', async () => {
-  await assert.rejects(() => footprint({ distanceKm: 0 }), (e) => e.status === 400);
-  await assert.rejects(() => footprint({ distanceKm: -5 }), (e) => e.status === 400);
-  await assert.rejects(() => footprint({ distanceKm: 'abc' }), (e) => e.status === 400);
+  await assert.rejects(
+    () => footprint({ distanceKm: 0 }),
+    (e) => e.status === 400,
+  );
+  await assert.rejects(
+    () => footprint({ distanceKm: -5 }),
+    (e) => e.status === 400,
+  );
+  await assert.rejects(
+    () => footprint({ distanceKm: 'abc' }),
+    (e) => e.status === 400,
+  );
 });
 
 test('rejects when no valid modes are supplied', async () => {

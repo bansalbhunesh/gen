@@ -46,7 +46,12 @@ test('finds the shortest of multiple possible paths', async () => {
 });
 
 test('wayfinding is available at the additional venues', async () => {
-  const sofi = await route({ venueId: 'usa-sofi', from: 'gate-1', to: 'sec-501', accessibleOnly: true });
+  const sofi = await route({
+    venueId: 'usa-sofi',
+    from: 'gate-1',
+    to: 'sec-501',
+    accessibleOnly: true,
+  });
   assert.ok(sofi.steps.every((s) => s.accessible));
   assert.match(sofi.directions, /Section 501/);
 

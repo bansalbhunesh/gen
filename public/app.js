@@ -9,8 +9,16 @@
 
 const RTL = new Set(['ar']);
 const LANG_LABELS = {
-  en: 'English', es: 'Español', fr: 'Français', pt: 'Português', de: 'Deutsch',
-  ar: 'العربية', ja: '日本語', ko: '한국어', zh: '中文', hi: 'हिन्दी',
+  en: 'English',
+  es: 'Español',
+  fr: 'Français',
+  pt: 'Português',
+  de: 'Deutsch',
+  ar: 'العربية',
+  ja: '日本語',
+  ko: '한국어',
+  zh: '中文',
+  hi: 'हिन्दी',
 };
 const SUGGESTIONS = [
   'Where is the nearest step-free route?',
@@ -33,14 +41,18 @@ async function api(path, options = {}) {
 }
 
 function escape(str) {
-  return String(str).replace(/[&<>"']/g, (c) =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
+  return String(str).replace(
+    /[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
   );
 }
 
 function showResult(el, html, { lang } = {}) {
   el.innerHTML = html;
   el.dir = lang && RTL.has(lang) ? 'rtl' : 'ltr';
+  // Set the language so assistive tech pronounces the result correctly.
+  if (lang) el.lang = lang;
+  else el.removeAttribute('lang');
 }
 
 function showError(el, message) {
@@ -70,11 +82,14 @@ function onSubmit(formSel, outSel, handler) {
   const out = $(outSel);
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    out.setAttribute('aria-busy', 'true');
     withPending($('button[type="submit"]', form), async () => {
       try {
         await handler(out);
       } catch (err) {
         showError(out, err.message);
+      } finally {
+        out.setAttribute('aria-busy', 'false');
       }
     });
   });
@@ -148,7 +163,8 @@ async function initData() {
     .map((v) => `<option value="${v.id}">${escape(v.name)} — ${escape(v.city)}</option>`)
     .join('');
   $('#concierge-venue').innerHTML = '<option value="">Any / not sure</option>' + venueOptions;
-  for (const id of ['#navigate-venue', '#crowd-venue', '#plan-venue']) $(id).innerHTML = venueOptions;
+  for (const id of ['#navigate-venue', '#crowd-venue', '#plan-venue'])
+    $(id).innerHTML = venueOptions;
 
   $('#translate-target').innerHTML = $('#language').innerHTML;
   $('#translate-target').value = 'es';
@@ -171,7 +187,10 @@ async function initData() {
     .join('');
   $$('#announce-langs .chip').forEach((chip) =>
     chip.addEventListener('click', () =>
-      chip.setAttribute('aria-pressed', chip.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'),
+      chip.setAttribute(
+        'aria-pressed',
+        chip.getAttribute('aria-pressed') === 'true' ? 'false' : 'true',
+      ),
     ),
   );
 
@@ -198,7 +217,9 @@ async function loadWayfindingNodes(venueId) {
       fromSel.innerHTML = toSel.innerHTML = msg;
       return;
     }
-    const opts = wayfindingNodes.map((n) => `<option value="${n.id}">${escape(n.label)}</option>`).join('');
+    const opts = wayfindingNodes
+      .map((n) => `<option value="${n.id}">${escape(n.label)}</option>`)
+      .join('');
     fromSel.innerHTML = toSel.innerHTML = opts;
     toSel.selectedIndex = Math.min(wayfindingNodes.length - 1, 4);
   } catch (err) {
@@ -303,11 +324,14 @@ function initAnnounce() {
     const items = result.languages
       .map(
         (l) =>
-          `<div class="ann-item"${RTL.has(l.language) ? ' dir="rtl"' : ''}>` +
+          `<div class="ann-item" lang="${l.language}"${RTL.has(l.language) ? ' dir="rtl"' : ''}>` +
           `<div class="lang">${LANG_LABELS[l.language] || l.language}</div>${escape(l.text)}</div>`,
       )
       .join('');
-    showResult(out, `<h3>Announcement (${escape(result.scenario)})</h3>${items}${sourceBadge('offline')}`);
+    showResult(
+      out,
+      `<h3>Announcement (${escape(result.scenario)})</h3>${items}${sourceBadge('offline')}`,
+    );
   });
 }
 
@@ -342,12 +366,15 @@ function initGreen() {
 
 function initPlan() {
   onSubmit('#plan-form', '#plan-output', async (out) => {
-    const result = await api(`/plan/${$('#plan-venue').value}?travelMinutes=${Number($('#plan-travel').value) || 45}`);
+    const result = await api(
+      `/plan/${$('#plan-venue').value}?travelMinutes=${Number($('#plan-travel').value) || 45}`,
+    );
     if (!result.match) {
       showResult(out, `<p>${escape(result.plan)}</p>`);
       return;
     }
-    const fmt = (iso) => new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+    const fmt = (iso) =>
+      new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
     showResult(
       out,
       `<h3>${escape(result.match.stage)}: ${escape(result.match.home)} v ${escape(result.match.away)}</h3>` +
@@ -367,9 +394,13 @@ function initTranslate() {
       method: 'POST',
       body: JSON.stringify({ text: $('#translate-text').value, target }),
     });
-    showResult(out, `<h3>Translation</h3><p>${escape(result.text)}</p>${sourceBadge(result.source)}`, {
-      lang: result.target,
-    });
+    showResult(
+      out,
+      `<h3>Translation</h3><p>${escape(result.text)}</p>${sourceBadge(result.source)}`,
+      {
+        lang: result.target,
+      },
+    );
   });
 }
 
