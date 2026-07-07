@@ -1,149 +1,239 @@
+<div align="center">
+
 # ⚽ StadiumIQ 2026
 
-**A GenAI-powered stadium operations & fan-experience platform for the FIFA World Cup 2026.**
+### GenAI Stadium Operations & Fan-Experience Platform for the FIFA World Cup 2026
 
-StadiumIQ turns Generative AI into a practical, always-available assistant for the four host-nation constituencies of the tournament — **fans, organizers, volunteers and venue staff** — across all 16 host stadiums in the USA, Canada and Mexico.
+_One always-available AI assistant for **fans, organizers, volunteers and venue staff** — across all 16 host stadiums in the USA, Canada & Mexico._
 
-It leverages GenAI for **navigation, crowd management, accessibility, transportation, sustainability, multilingual assistance, operational intelligence and real-time decision support** — every capability area the challenge calls for, each implemented and demonstrable.
+[![Live Demo](https://img.shields.io/badge/▶_Live_Demo-gen--gpee.onrender.com-00b2a9?style=for-the-badge)](https://gen-gpee.onrender.com)
 
-> **Designed to never hard-fail.** A live-venue tool must work even when the network doesn't. StadiumIQ integrates a real large language model (Anthropic Claude) when an API key is present, and **transparently falls back to a deterministic, offline knowledge engine** otherwise — so every feature, demo and test runs with zero external dependencies.
+![Tests](https://img.shields.io/badge/tests-119_passing-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-~99%25-brightgreen)
+![WCAG](<https://img.shields.io/badge/WCAG-2.1_AA_(axe_verified)-blueviolet>)
+![Node](https://img.shields.io/badge/node-%E2%89%A520-339933?logo=node.js&logoColor=white)
+![AI](https://img.shields.io/badge/AI-Anthropic_Claude-d97757)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Runs offline](https://img.shields.io/badge/runs-100%25_offline-informational)
 
 ![StadiumIQ 2026 interface](docs/screenshot.png)
 
----
-
-## Capabilities
-
-| #   | Capability area                   | Feature in StadiumIQ                                                     | Endpoint                             |
-| --- | --------------------------------- | ------------------------------------------------------------------------ | ------------------------------------ |
-| 1   | 🗣️ **Multilingual assistance**    | RAG-grounded fan concierge in 10 languages (RTL-aware)                   | `POST /api/concierge`                |
-| 2   | 🧭 **Navigation**                 | Shortest-path wayfinding + **step-free accessible mode** + SVG route map | `POST /api/navigate`                 |
-| 3   | 👥 **Crowd management**           | Live per-zone density + AI-authored, prioritised actions                 | `GET /api/crowd/:venueId`            |
-| 4   | ⚡ **Real-time decision support** | Incident triage: priority, dispatch team, response SLA, escalation       | `POST /api/incident`                 |
-| 5   | 📢 **Operational intelligence**   | One-click multilingual PA announcement generation                        | `POST /api/announce`                 |
-| 6   | 🌱 **Sustainability & transport** | Travel carbon-footprint comparison + greenest-choice nudge               | `POST /api/sustainability/footprint` |
-| 7   | 🗓️ **Match-day planning**         | Personalised arrival plan from the next fixture                          | `GET /api/plan/:venueId`             |
-| 8   | 🌐 **Translation**                | On-demand translation for staff and fans                                 | `POST /api/translate`                |
-| 9   | 🦺 **Volunteer/staff enablement** | Role-specific GenAI shift briefing (duties, escalation, phrases)         | `POST /api/briefing`                 |
-| 10  | ♿ **Accessibility**              | Accessible routing **and** a WCAG-focused, keyboard-navigable UI         | (cross-cutting)                      |
+</div>
 
 ---
 
-## Architecture
+> **⚡ Built to never hard-fail.** A tool for a live stadium must work even when the network doesn't. StadiumIQ uses **Anthropic Claude** when an API key is present, and **transparently falls back to a deterministic offline engine** otherwise — so **every feature, demo and test runs with zero external dependencies and zero cost.** The live demo above runs fully offline by design.
+
+## 📑 Table of Contents
+
+- [The Problem](#-the-problem)
+- [Our Solution](#-our-solution)
+- [Live Demo](#-live-demo)
+- [Feature Showcase](#-feature-showcase)
+- [How GenAI Is Used](#-how-genai-is-used)
+- [Architecture](#-architecture)
+- [Quick Start](#-quick-start)
+- [API Reference](#-api-reference)
+- [Quality, Testing & Security](#-quality-testing--security)
+- [How We Meet Every Judging Criterion](#-how-we-meet-every-judging-criterion)
+- [Deployment](#-deployment)
+- [Project Structure](#-project-structure)
+- [Documentation](#-documentation)
+- [License](#-license)
+
+## 🎯 The Problem
+
+A **48-team, 104-match** World Cup across **3 countries and 16 venues** creates enormous operational load: fans who speak dozens of languages, unfamiliar stadiums, accessibility needs, crowd surges at gates and transit hubs, and staff & volunteers making second-by-second decisions. Information is scattered, monolingual, and reactive.
+
+## 💡 Our Solution
+
+StadiumIQ centralises it all into **one GenAI assistant** that turns Generative AI into practical, real-time help — implementing **every** capability area the challenge calls for, for **every** named audience.
+
+<div align="center">
+
+|                           For **Fans**                           |                  For **Organizers**                  |              For **Volunteers**              |                   For **Venue Staff**                   |
+| :--------------------------------------------------------------: | :--------------------------------------------------: | :------------------------------------------: | :-----------------------------------------------------: |
+| Concierge · Wayfinding · Green travel · Match plan · Translation | Crowd intelligence · Incident triage · Announcements | Shift briefings · Announcements · Wayfinding | Incident triage · Crowd ops · Briefings · Announcements |
+
+</div>
+
+## 🚀 Live Demo
+
+**→ [gen-gpee.onrender.com](https://gen-gpee.onrender.com)**
+
+- The badge in the top-right reads **“AI: offline ⓘ”** — this is **intentional**: it runs the fully-functional offline engine (no API key needed). Hover it for details.
+- ⏳ _Hosted on Render's free tier, which sleeps after ~15 min idle — the **first** load can take ~50s to wake. It's fast after that._
+
+## ✨ Feature Showcase
+
+Every capability area from the brief, implemented as a working, tested feature:
+
+|  #  | Capability area                   | Feature                                                                  | Endpoint                             |
+| :-: | --------------------------------- | ------------------------------------------------------------------------ | ------------------------------------ |
+|  1  | 🗣️ **Multilingual assistance**    | RAG-grounded fan concierge in **10 languages** (RTL-aware)               | `POST /api/concierge`                |
+|  2  | 🧭 **Navigation**                 | Shortest-path wayfinding + **step-free accessible mode** + SVG route map | `POST /api/navigate`                 |
+|  3  | 👥 **Crowd management**           | Live per-zone density + AI-authored, prioritised actions                 | `GET /api/crowd/:venueId`            |
+|  4  | ⚡ **Real-time decision support** | Incident triage: priority, dispatch team, response SLA, escalation       | `POST /api/incident`                 |
+|  5  | 📢 **Operational intelligence**   | One-click **multilingual PA announcements**                              | `POST /api/announce`                 |
+|  6  | 🦺 **Volunteer/staff enablement** | Role-specific **shift briefings** (duties, escalation, phrases)          | `POST /api/briefing`                 |
+|  7  | 🌱 **Sustainability & transport** | Travel **carbon-footprint** comparison + greenest-choice nudge           | `POST /api/sustainability/footprint` |
+|  8  | 🗓️ **Match-day planning**         | Personalised arrival plan from the fixture schedule                      | `GET /api/plan/:venueId`             |
+|  9  | 🌐 **Translation**                | On-demand translation for staff & fans                                   | `POST /api/translate`                |
+| ♿  | **Accessibility**                 | Accessible routing **and** a WCAG-2.1-AA, keyboard-navigable UI          | _cross-cutting_                      |
+
+Coverage is even **machine-verifiable** at [`GET /api/capabilities`](https://gen-gpee.onrender.com/api/capabilities) and asserted by tests. Full matrix → [`docs/ALIGNMENT.md`](docs/ALIGNMENT.md).
+
+## 🧠 How GenAI Is Used
+
+Every feature composes a **grounded prompt** and calls a **single AI gateway** — `aiService.generate({ system, prompt, fallback })`. The model is used where language _matters_ (friendly directions, calm incident briefs, encouraging sustainability nudges, multilingual announcements), while deterministic logic (routing, priority matrices, footprint maths) stays auditable.
+
+Centralising the model behind one gateway means one place enforces **provider isolation, hard timeouts, prompt-injection sanitisation, response caching, usage metrics, and graceful offline fallback** — so the platform degrades safely instead of failing.
+
+## 🏗️ Architecture
 
 ```
-Browser (accessible SPA, vanilla JS, SVG route map — no framework)
-        │  fetch  /api/*
+Browser (accessible SPA · vanilla JS · inline SVG route map · no framework)
+        │  fetch /api/*
         ▼
 Express app ─► requestId · timing · compression · helmet CSP · CORS
-        │        · rate-limit (2 tiers) · JSON guard · body caps · validation
-        ├─ routes/            REST surface (+ OpenAPI, metrics, capabilities),
-        │                     cacheable reference data (ETag/304), async-safe
-        ├─ services/
-        │    ├─ aiService            ← single GenAI gateway: Claude + offline fallback,
-        │    │                          sanitisation, TTL cache, metrics
-        │    ├─ conciergeService     RAG over the knowledge base
-        │    ├─ navigationService    Dijkstra routing (memoised) + AI directions
-        │    ├─ crowdService         deterministic telemetry + AI ops advice
-        │    ├─ incidentService      severity/priority matrix + AI action brief
-        │    ├─ announcementService  multilingual PA generation
-        │    ├─ briefingService      volunteer/staff shift briefings
-        │    ├─ sustainabilityService footprint modelling + AI nudge
-        │    ├─ scheduleService      fixtures + AI match-day plan
-        │    ├─ translationService   10-language support
-        │    └─ knowledgeBase        indexed venues / KB / schedule / emissions / capabilities
-        ├─ middleware/         validation, requestId, timing, security, error handling
-        └─ utils/              logger, TTL cache, prompt sanitiser
+        │       · rate-limit (general + AI tier) · JSON guard · body caps · validation
+        ├─ routes/     REST surface (+ OpenAPI, metrics, capabilities),
+        │              cacheable reference data (ETag / 304)
+        ├─ services/   one module per capability — pure, each with an offline fallback
+        │      └─ aiService ──► ANTHROPIC_API_KEY?  yes → Claude (sanitised, cached)
+        │                                            no/err → deterministic engine
+        ├─ middleware/ validation · requestId · timing · security · error handling
+        ├─ utils/      logger · TTL cache · prompt sanitiser
+        └─ data/       venues · wayfinding graphs · KB · fixtures · emissions · capabilities
 ```
 
-**One AI gateway.** Every feature composes a prompt and calls `aiService.generate()`, which either queries Claude or invokes a caller-supplied deterministic fallback. This isolates the provider and centralises timeouts, **prompt-injection sanitisation**, **response caching** and **metrics** — and guarantees graceful degradation everywhere.
+Details → [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
----
-
-## Getting started
+## ⚡ Quick Start
 
 ```bash
-npm install                     # runtime deps only
+# 1. Install (runtime deps only)
+npm install
 
-cp .env.example .env            # optional: set ANTHROPIC_API_KEY to enable the live model
-npm start                       # http://localhost:3000
+# 2. Run — works immediately with no API key (offline engine)
+npm start                 # → http://localhost:3000
 
-npm test                        # 119 tests, no network or API key required
+# 3. (Optional) enable live Claude
+cp .env.example .env && echo "ANTHROPIC_API_KEY=sk-ant-..." >> .env
+
+# 4. Test everything (browserless, no key, no network)
+npm test                  # 119 tests
 ```
 
-With no API key the platform runs on its **offline engine**; the UI badge and `/api/health` report `aiMode: offline`. Add a key and every feature upgrades to live GenAI responses — no code changes.
-
----
-
-## API reference
-
-| Method | Endpoint                                           | Purpose                                   |
-| ------ | -------------------------------------------------- | ----------------------------------------- |
-| `GET`  | `/api/health`                                      | Liveness + current AI mode                |
-| `GET`  | `/api/metrics`                                     | AI/usage counters, cache-hit rate, memory |
-| `GET`  | `/api/openapi.json`                                | OpenAPI 3.1 contract                      |
-| `GET`  | `/api/tournament` · `/api/config/options`          | Metadata & UI enums                       |
-| `GET`  | `/api/venues` · `/api/venues/:id` · `/api/matches` | Reference data                            |
-| `POST` | `/api/concierge`                                   | Multilingual Q&A                          |
-| `POST` | `/api/navigate`                                    | Wayfinding (with `accessibleOnly`)        |
-| `GET`  | `/api/crowd/:venueId`                              | Crowd/ops snapshot                        |
-| `POST` | `/api/incident`                                    | Real-time incident triage                 |
-| `POST` | `/api/announce`                                    | Multilingual PA announcement              |
-| `POST` | `/api/briefing`                                    | Volunteer & staff shift briefing          |
-| `POST` | `/api/sustainability/footprint`                    | Travel carbon comparison                  |
-| `GET`  | `/api/plan/:venueId`                               | AI match-day plan                         |
-| `POST` | `/api/translate`                                   | Translate text                            |
-| `GET`  | `/api/capabilities`                                | Capability → area → persona alignment map |
-
-**Example**
+**Docker:**
 
 ```bash
-curl -X POST localhost:3000/api/incident \
+docker build -t stadiumiq .
+docker run -p 3000:3000 -e NODE_ENV=production stadiumiq
+```
+
+## 🔌 API Reference
+
+<div align="center">
+
+| Method | Endpoint                                           | Purpose                                         |
+| ------ | -------------------------------------------------- | ----------------------------------------------- |
+| `GET`  | `/api/health`                                      | Liveness + current AI mode                      |
+| `GET`  | `/api/metrics`                                     | AI + route-cache hit-rates, avg latency, memory |
+| `GET`  | `/api/openapi.json`                                | OpenAPI 3.1 contract                            |
+| `GET`  | `/api/capabilities`                                | Capability → area → persona alignment map       |
+| `GET`  | `/api/tournament` · `/api/config/options`          | Metadata & UI enums                             |
+| `GET`  | `/api/venues` · `/api/venues/:id` · `/api/matches` | Reference data                                  |
+| `POST` | `/api/concierge`                                   | Multilingual Q&A                                |
+| `POST` | `/api/navigate`                                    | Wayfinding (with `accessibleOnly`)              |
+| `GET`  | `/api/crowd/:venueId`                              | Crowd / ops snapshot                            |
+| `POST` | `/api/incident`                                    | Real-time incident triage                       |
+| `POST` | `/api/announce`                                    | Multilingual PA announcement                    |
+| `POST` | `/api/briefing`                                    | Volunteer & staff shift briefing                |
+| `POST` | `/api/sustainability/footprint`                    | Travel carbon comparison                        |
+| `GET`  | `/api/plan/:venueId`                               | AI match-day plan                               |
+| `POST` | `/api/translate`                                   | Translate text                                  |
+
+</div>
+
+```bash
+curl -X POST https://gen-gpee.onrender.com/api/incident \
   -H 'content-type: application/json' \
   -d '{"venueId":"usa-metlife","type":"crowd-surge","severity":"high","zone":"East Gate"}'
 ```
 
----
-
-## Quality gates
+## 🧪 Quality, Testing & Security
 
 ```bash
 npm run check       # eslint + prettier --check + 119 unit/integration tests
-npm run test:e2e    # browser E2E + axe-core accessibility (WCAG 2.1 AA, both themes)
+npm run test:e2e    # real-browser E2E + axe-core accessibility (light + dark)
+npm run bench       # hot-path throughput micro-benchmark
 ```
 
-| Command                 | Purpose                                                                 |
-| ----------------------- | ----------------------------------------------------------------------- |
-| `npm test`              | 119 unit + integration tests (browserless, no key) — ~99% line coverage |
-| `npm run lint`          | ESLint (flat config, recommended + custom rules)                        |
-| `npm run format:check`  | Prettier formatting check                                               |
-| `npm run test:coverage` | Coverage report                                                         |
-| `npm run test:e2e`      | E2E + axe-core accessibility in headless Chromium                       |
+- **119 unit + integration tests**, **~99% line coverage** — services, validators, middleware, the AI gateway's live path (via a stubbed `fetch`), route memoisation, and the full HTTP surface. All pass offline.
+- **Browser E2E + axe-core** across all 8 panels: **0 WCAG 2.1 AA violations** in light **and** dark themes, **0 console errors**.
+- **Security**: helmet CSP + HSTS + Permissions-Policy, CORS allow-list, two-tier rate limiting, bounded bodies (`413`), JSON content-type enforcement (`415`), typed input validation with error codes, prompt-injection sanitisation, no secrets committed. See [`SECURITY.md`](SECURITY.md).
 
-## How each evaluation criterion is met
+## 🏆 How We Meet Every Judging Criterion
 
-- **Code Quality** — small, single-responsibility modules; a factory-built app; JSDoc throughout; one consistent error model with machine-readable `code`s; an OpenAPI 3.1 contract; **ESLint (flat config) + Prettier** clean; documented in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
-- **Security** — `helmet` CSP + HSTS + `Permissions-Policy` + `Referrer-Policy`, CORS allow-list, **two-tier per-IP rate limiting**, bounded JSON bodies (`413`), JSON content-type enforcement (`415`), **typed input validation** on every field with error codes, **prompt-injection sanitisation** before any model call, request-id correlation, no secrets committed, no stack-trace leakage in production. Full write-up in [`SECURITY.md`](SECURITY.md).
-- **Efficiency** — **gzip/brotli compression** (≈79% smaller JSON), **HTTP caching with strong ETags + `304`** on static reference endpoints, **memoised wayfinding** (Dijkstra runs once per route — ~30× faster warm), an **AI response cache**, data indexed once at startup with `Map` lookups, AI timeouts, and short-circuits that skip needless model calls. All observable at `/api/metrics` (cache hit-rates + avg latency); `npm run bench` prints hot-path throughput.
-- **Testing** — **119 unit + integration tests** on Node's built-in runner (**~99% line coverage**) covering every service, validator, middleware, graph edge cases, the **AI gateway's live path via a stubbed `fetch`**, and the full HTTP surface — all pass offline. A separate **browser E2E suite runs axe-core** and asserts **zero WCAG 2.1 AA violations** in light and dark themes with zero console errors.
-- **Accessibility** — semantic HTML, skip link, ARIA Tabs pattern with arrow-key navigation, `aria-live`/`aria-busy` result regions, per-result `lang`/`dir`, visible focus, WCAG-AA contrast (axe-verified), `prefers-reduced-motion` / `prefers-contrast` / `forced-colors` support, an accessible SVG route map, **plus** first-class step-free routing. See [`docs/ACCESSIBILITY.md`](docs/ACCESSIBILITY.md).
-- **Problem Statement Alignment** — **all eight** GenAI capability areas **and all four** named audiences (fans, organizers, volunteers, venue staff) are covered by working features — including a **volunteer/staff shift-briefing** generator. The coverage is exposed as a machine-readable contract at **`GET /api/capabilities`** and asserted in tests; see the full matrix in [`docs/ALIGNMENT.md`](docs/ALIGNMENT.md). Grounded in real 2026 data: 16 host venues, the 48-team/104-match format, opening at Estadio Azteca, final at MetLife.
+| Criterion                       | How StadiumIQ delivers                                                                                                                                                                                                  |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Code Quality**                | Small single-responsibility modules · factory-built app · JSDoc throughout · consistent error model with machine-readable `code`s · OpenAPI 3.1 contract · **ESLint + Prettier clean**                                  |
+| **Security**                    | Helmet CSP/HSTS/Permissions-Policy · CORS allow-list · 2-tier rate limiting · `413`/`415` guards · typed validation · **prompt-injection sanitisation** · request-id correlation · no prod stack-trace leakage          |
+| **Efficiency**                  | **gzip (~79% smaller)** · ETag/`304` caching · **memoised Dijkstra (~30× faster warm)** · AI response cache · startup-indexed data · observable at `/api/metrics` + `npm run bench`                                     |
+| **Testing**                     | **119 tests, ~99% coverage** · AI live-path stubbed · **axe-core E2E** in both themes (0 violations) · CI on Node 20 & 22                                                                                               |
+| **Accessibility**               | Semantic HTML · ARIA Tabs + arrow keys · `aria-live`/`aria-busy` · per-result `lang`/`dir` · WCAG-AA contrast · reduced-motion / high-contrast / forced-colors · accessible SVG map · **first-class step-free routing** |
+| **Problem Statement Alignment** | **All 8** capability areas **and all 4** named audiences covered — proven via `/api/capabilities` + tests · grounded in real 2026 data (16 venues, 48 teams, opening at Azteca, final at MetLife)                       |
 
----
+## ☁️ Deployment
 
-## Tech stack
+| Platform                             | Fit      |                                                                  |
+| ------------------------------------ | -------- | ---------------------------------------------------------------- |
+| **Render / Railway / Fly.io**        | ✅ Best  | `render.yaml` included — one-click blueprint                     |
+| **Docker** (Cloud Run, ECS, K8s, VM) | ✅ Best  | `Dockerfile` (alpine, non-root, healthcheck)                     |
+| **Vercel**                           | ⚠️ Works | Serverless adapter (`api/index.js` + `vercel.json`); see caveats |
 
-Node.js 20+ · Express · Helmet · express-rate-limit · compression · Anthropic Claude (`claude-sonnet-5`) · vanilla ES-module front-end with inline SVG. Dev tooling: ESLint · Prettier · Node built-in test runner · Playwright + axe-core (E2E/a11y). No front-end framework and no committed `node_modules` keep the repository well under 10 MB.
+**No database, no build step, no required secrets.** The only optional variable is `ANTHROPIC_API_KEY` (enables live AI). Full env-var reference & platform guides → [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
-## Documentation
+## 📂 Project Structure
 
-- [`docs/DEPLOY.md`](docs/DEPLOY.md) — hosting options (Docker/Render/Vercel) & environment variables
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — layers, the AI gateway pattern, algorithms
-- [`docs/ALIGNMENT.md`](docs/ALIGNMENT.md) — problem-statement coverage matrix (areas × personas)
-- [`docs/ACCESSIBILITY.md`](docs/ACCESSIBILITY.md) — WCAG approach & automated checks
-- [`SECURITY.md`](SECURITY.md) — security controls & deployment checklist
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`CHANGELOG.md`](CHANGELOG.md)
+```
+stadiumiq-2026/
+├── src/
+│   ├── app.js · server.js · config.js
+│   ├── routes/        # API router, OpenAPI spec
+│   ├── services/      # 9 GenAI features + AI gateway + knowledge base
+│   ├── middleware/    # validation · security · timing · errors · requestId
+│   ├── utils/         # logger · TTL cache · prompt sanitiser
+│   └── data/          # venues · wayfinding · KB · fixtures · emissions · capabilities
+├── public/            # accessible SPA (index.html · app.js · styles.css)
+├── test/              # 119 unit + integration tests
+├── e2e/               # browser E2E + axe-core accessibility
+├── scripts/           # bench
+├── docs/              # ARCHITECTURE · ALIGNMENT · ACCESSIBILITY · DEPLOY
+├── Dockerfile · render.yaml · vercel.json · api/index.js
+└── .github/workflows/ # CI (lint · format · test · audit · e2e)
+```
 
-## License
+## 📚 Documentation
 
-MIT — see [LICENSE](LICENSE).
+| Doc                                                                   | What's inside                                                       |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| [`docs/DEPLOY.md`](docs/DEPLOY.md)                                    | Hosting options (Docker/Render/Vercel) & every environment variable |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)                        | Layers, the AI gateway pattern, algorithms, efficiency              |
+| [`docs/ALIGNMENT.md`](docs/ALIGNMENT.md)                              | Problem-statement coverage matrix (areas × personas)                |
+| [`docs/ACCESSIBILITY.md`](docs/ACCESSIBILITY.md)                      | WCAG approach & automated axe-core checks                           |
+| [`SECURITY.md`](SECURITY.md)                                          | Security controls & deployment hardening checklist                  |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`CHANGELOG.md`](CHANGELOG.md) | Dev workflow & release notes                                        |
+
+## 📝 License
+
+[MIT](LICENSE) — built for the **FIFA World Cup 2026** across 🇺🇸 🇨🇦 🇲🇽.
+
+<div align="center">
+
+**StadiumIQ 2026** — _navigation · crowd management · accessibility · transportation · sustainability · multilingual assistance · operational intelligence · real-time decision support._
+
+Runs with or without a live AI model. Always on. Always accessible.
+
+</div>
