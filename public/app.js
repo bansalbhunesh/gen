@@ -121,7 +121,12 @@ function initTabs() {
 
 // --- SVG route map ---------------------------------------------------------
 function renderRouteMap(fromLabel, steps) {
-  const nodes = [{ label: fromLabel, accessible: true }, ...steps];
+  // API steps carry the destination label in `.to`; normalise to `.label` so
+  // both the start node and every step render their name (not "undefined").
+  const nodes = [
+    { label: fromLabel, accessible: true },
+    ...steps.map((s) => ({ label: s.to, accessible: s.accessible })),
+  ];
   const gap = 46;
   const height = nodes.length * gap + 10;
   const x = 24;

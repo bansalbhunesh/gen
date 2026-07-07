@@ -30,6 +30,7 @@ _One always-available AI assistant for **fans, organizers, volunteers and venue 
 - [Our Solution](#-our-solution)
 - [Live Demo](#-live-demo)
 - [Feature Showcase](#-feature-showcase)
+- [Walkthrough](#-walkthrough)
 - [How GenAI Is Used](#-how-genai-is-used)
 - [Architecture](#-architecture)
 - [Quick Start](#-quick-start)
@@ -82,6 +83,56 @@ Every capability area from the brief, implemented as a working, tested feature:
 | ♿  | **Accessibility**                 | Accessible routing **and** a WCAG-2.1-AA, keyboard-navigable UI          | _cross-cutting_                      |
 
 Coverage is even **machine-verifiable** at [`GET /api/capabilities`](https://gen-gpee.onrender.com/api/capabilities) and asserted by tests. Full matrix → [`docs/ALIGNMENT.md`](docs/ALIGNMENT.md).
+
+## 🎬 Walkthrough
+
+_Real output from the live app, running on the offline engine (no API key)._
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <b>🗣️ Multilingual concierge</b><br/>
+      <sub>Grounded, natural-language answers — here on accessibility & sensory rooms.</sub><br/>
+      <img src="docs/img/concierge.png" alt="Concierge answering an accessibility question" />
+    </td>
+    <td width="50%" valign="top">
+      <b>🧭 Accessible wayfinding</b><br/>
+      <sub>Step-free route with an accessible SVG map — routed via the elevator, not stairs.</sub><br/>
+      <img src="docs/img/wayfinding.png" alt="Step-free SVG route map from gate to upper tier via elevator" />
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <b>👥 Crowd & operational intelligence</b><br/>
+      <sub>Live per-zone density with AI-authored, prioritised control-room actions.</sub><br/>
+      <img src="docs/img/crowd.png" alt="Per-zone crowd density grid with prioritised recommendations" />
+    </td>
+    <td width="50%" valign="top">
+      <b>⚡ Real-time incident triage</b><br/>
+      <sub>Computed priority, dispatch team, response SLA and escalation + action brief.</sub><br/>
+      <img src="docs/img/incident.png" alt="Incident triage showing P1 priority and recommended actions" />
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <b>🦺 Volunteer & staff briefing</b><br/>
+      <sub>Role-specific shift briefing: duties, escalation path and welcome phrases.</sub><br/>
+      <img src="docs/img/briefing.png" alt="Volunteer shift briefing for an accessibility host" />
+    </td>
+    <td width="50%" valign="top">
+      <b>🌱 Green travel & carbon footprint</b><br/>
+      <sub>Ranked travel options with the greenest choice and the saving vs driving.</sub><br/>
+      <img src="docs/img/green.png" alt="Ranked travel carbon-footprint comparison" />
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" valign="top">
+      <b>📢 Multilingual PA announcements</b><br/>
+      <sub>One message broadcast into many languages at once (RTL-aware).</sub><br/>
+      <img src="docs/img/announce.png" alt="A gate-open announcement rendered in English, Spanish and French" width="49%" />
+    </td>
+  </tr>
+</table>
 
 ## 🧠 How GenAI Is Used
 

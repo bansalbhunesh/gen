@@ -91,6 +91,8 @@ async function main() {
     await page.waitForSelector('#navigate-output svg.route-map');
     const nodes = await page.$$eval('#navigate-output .route-map circle', (c) => c.length);
     assert.ok(nodes >= 2, 'route map should render nodes');
+    const mapText = await page.textContent('#navigate-output .route-map');
+    assert.doesNotMatch(mapText, /undefined/, 'route map node labels must resolve to names');
     await runAxe(page, 'Wayfinding (route rendered)');
 
     // Ops: incident triage
