@@ -132,6 +132,21 @@ _Real output from the live app, running on the offline engine (no API key)._
       <img src="docs/img/announce.png" alt="A gate-open announcement rendered in English, Spanish and French" width="49%" />
     </td>
   </tr>
+  <tr>
+    <td width="50%" valign="top" align="center">
+      <b>📱 Responsive — mobile &amp; desktop</b><br/>
+      <img src="docs/img/mobile.png" alt="StadiumIQ running on a mobile phone screen" width="62%" />
+    </td>
+    <td width="50%" valign="top">
+      <b>🎨 Design &amp; accessibility</b><br/>
+      <sub>
+        Signature gradient app-bar, pill navigation that scrolls on small screens,
+        elevated cards, 46px touch targets and smooth motion (reduced-motion aware).
+        Light &amp; dark themes, high-contrast and forced-colors support — every
+        screen <b>WCAG&nbsp;2.1&nbsp;AA verified by axe-core</b>.
+      </sub>
+    </td>
+  </tr>
 </table>
 
 ## 🧠 How GenAI Is Used
