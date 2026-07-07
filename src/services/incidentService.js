@@ -96,7 +96,14 @@ export async function triage({ venueId, type, severity, zone, detail }) {
   };
 }
 
-/** @returns {string[]} */
+/**
+ * Map an incident type to standard base instructions.
+ * @param {string} type
+ * @param {string} severity
+ * @param {string|null} zone
+ * @param {boolean} escalate
+ * @returns {string[]}
+ */
 function baseActions(type, severity, zone, escalate) {
   const at = zone ? `at ${zone}` : 'at the location';
   const common = {

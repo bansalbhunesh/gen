@@ -14,6 +14,12 @@ export const httpMetrics = {
   },
 };
 
+/**
+ * Express middleware to record request execution time.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
 export function timing(req, res, next) {
   const start = process.hrtime.bigint();
   res.on('finish', () => {

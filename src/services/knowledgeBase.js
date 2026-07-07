@@ -12,7 +12,11 @@ import { dirname, join } from 'node:path';
 
 const dataDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'data');
 
-/** @returns {any} */
+/**
+ * Load and parse a JSON data file from the data directory.
+ * @param {string} name
+ * @returns {any}
+ */
 function load(name) {
   return JSON.parse(readFileSync(join(dataDir, name), 'utf8'));
 }
@@ -34,12 +38,20 @@ export const emissionModes = sustainabilityData.modes;
 export const sustainabilityTips = sustainabilityData.tips;
 export const capabilities = capabilitiesData;
 
-/** @param {string} id */
+/**
+ * Retrieve a venue by ID.
+ * @param {string} id
+ * @returns {object|null}
+ */
 export function getVenue(id) {
   return venuesById.get(id) || null;
 }
 
-/** @param {string} venueId */
+/**
+ * Filter all matches for a specific venue.
+ * @param {string} venueId
+ * @returns {Array<object>}
+ */
 export function getMatchesForVenue(venueId) {
   return matches.filter((m) => m.venueId === venueId);
 }
@@ -58,17 +70,29 @@ export function getNextMatch(now = new Date(), venueId) {
   );
 }
 
-/** @param {string} id */
+/**
+ * Retrieve a transport emission mode by ID.
+ * @param {string} id
+ * @returns {object|null}
+ */
 export function getEmissionMode(id) {
   return emissionModes.find((m) => m.id === id) || null;
 }
 
-/** @param {string} id */
+/**
+ * Retrieve wayfinding zone graph data for a venue.
+ * @param {string} id
+ * @returns {object|null}
+ */
 export function getZoneGraph(id) {
   return zones[id] || null;
 }
 
-/** Escape a string for safe use inside a RegExp. */
+/**
+ * Escape a string for safe use inside a RegExp.
+ * @param {string} str
+ * @returns {string}
+ */
 function escapeRegExp(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

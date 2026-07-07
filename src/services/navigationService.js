@@ -194,6 +194,13 @@ function buildSteps(path, nodes) {
   });
 }
 
+/**
+ * Format path steps into a wayfinding prompt for the model.
+ * @param {object|null} venue
+ * @param {Array<object>} steps
+ * @param {boolean} accessibleOnly
+ * @returns {string}
+ */
 function buildDirectionsPrompt(venue, steps, accessibleOnly) {
   const header = venue ? `Venue: ${venue.name}.` : '';
   const mode = accessibleOnly ? 'Step-free (accessible) route requested.' : '';

@@ -6,6 +6,12 @@
  */
 import { randomUUID } from 'node:crypto';
 
+/**
+ * Express middleware to attach a unique request UUID to every request.
+ * @param {import('express').Request & { id?: string }} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
 export function requestId(req, res, next) {
   const incoming = req.headers['x-request-id'];
   const id = typeof incoming === 'string' && incoming.length <= 100 ? incoming : randomUUID();

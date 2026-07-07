@@ -15,6 +15,7 @@ import config from '../config.js';
  * machine-readable code.
  * @param {number} max
  * @param {string} code
+ * @returns {import('express-rate-limit').RateLimitRequestHandler}
  */
 function makeLimiter(max, code) {
   return rateLimit({
@@ -43,6 +44,9 @@ export const aiLimiter = makeLimiter(config.rateLimit.aiMax, 'ai_rate_limited');
  * Reject mutating requests that are not JSON. A body-carrying POST must declare
  * `application/json`; anything else is a 415. This narrows the attack surface
  * and prevents accidental form/multipart parsing.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
  */
 export function requireJson(req, res, next) {
   if (req.method === 'POST' && !req.is('application/json')) {

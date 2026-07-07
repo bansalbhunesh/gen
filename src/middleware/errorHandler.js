@@ -9,7 +9,11 @@
 import logger from '../utils/logger.js';
 import config from '../config.js';
 
-/** 404 handler for unmatched routes. */
+/**
+ * 404 handler for unmatched routes.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 export function notFound(req, res) {
   res
     .status(404)

@@ -19,7 +19,11 @@ const ZONES = [
   'Food Court',
 ];
 
-/** Density band thresholds (occupancy ratio 0..1). */
+/**
+ * Density band thresholds (occupancy ratio 0..1).
+ * @param {number} ratio
+ * @returns {'critical'|'high'|'moderate'|'low'}
+ */
 function band(ratio) {
   if (ratio >= 0.85) return 'critical';
   if (ratio >= 0.7) return 'high';
@@ -90,6 +94,10 @@ export async function snapshot({ venueId, timeBucket }) {
   };
 }
 
+/**
+ * Get the current 15-minute ISO time bucket.
+ * @returns {string}
+ */
 function currentBucket() {
   // 15-minute buckets keep snapshots stable within a short window.
   const now = new Date();
@@ -97,6 +105,13 @@ function currentBucket() {
   return `${now.getUTCFullYear()}-${now.getUTCMonth() + 1}-${now.getUTCDate()}T${now.getUTCHours()}:${minutes}`;
 }
 
+/**
+ * Format zone data into a prompt for the operations advisor.
+ * @param {object} venue
+ * @param {Array<object>} zones
+ * @param {string} overall
+ * @returns {string}
+ */
 function buildOpsPrompt(venue, zones, overall) {
   const lines = zones
     .map((z) => `- ${z.zone}: ${Math.round(z.occupancy * 100)}% (${z.status})`)
@@ -104,7 +119,13 @@ function buildOpsPrompt(venue, zones, overall) {
   return `Venue: ${venue.name} (capacity ${venue.capacity}). Overall: ${overall}.\nZone density:\n${lines}`;
 }
 
-/** @param {Array<object>} zones @param {Array<object>} hotspots @param {string} overall */
+/**
+ * Offline fallback generator for crowd recommendations.
+ * @param {Array<object>} zones
+ * @param {Array<object>} hotspots
+ * @param {string} overall
+ * @returns {string}
+ */
 function offlineRecommendations(zones, hotspots, overall) {
   if (hotspots.length === 0) {
     return `Overall density is ${overall}. All zones flowing normally — maintain standard staffing and keep monitoring the Transit Hub as the match ends.`;

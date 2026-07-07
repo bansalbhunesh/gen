@@ -12,6 +12,10 @@ import { getVenue, getNextMatch, getMatchesForVenue, matches } from './knowledge
 /** Gates open this many minutes before kickoff; we advise arriving then. */
 const GATES_OPEN_BEFORE_MIN = 90;
 
+/**
+ * Retrieve all tournament match fixtures.
+ * @returns {Array<object>}
+ */
 export function listMatches() {
   return matches;
 }
