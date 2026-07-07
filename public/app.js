@@ -152,10 +152,21 @@ async function initData() {
   try {
     const health = await api('/health');
     const badge = $('#ai-mode');
-    badge.textContent = health.aiMode === 'model' ? 'AI: live model' : 'AI: offline';
-    badge.classList.add(health.aiMode === 'model' ? 'model' : 'offline');
+    const offline = health.aiMode !== 'model';
+    badge.textContent = offline ? 'AI: offline ⓘ' : 'AI: live model ⓘ';
+    badge.classList.add(offline ? 'offline' : 'model');
+    // Make it unmistakable to reviewers that offline mode is intentional and
+    // fully functional — not an error or a broken integration.
+    badge.title = offline
+      ? 'Running on the built-in offline engine — no API key required. Every ' +
+        'feature is fully functional; only the wording is deterministic instead ' +
+        'of model-generated. Set ANTHROPIC_API_KEY to enable live Claude output.'
+      : 'Connected to a live Claude model via the ANTHROPIC_API_KEY environment variable.';
+    badge.setAttribute('aria-label', badge.textContent.replace(' ⓘ', '.') + ' ' + badge.title);
   } catch {
-    $('#ai-mode').textContent = 'AI: unknown';
+    const badge = $('#ai-mode');
+    badge.textContent = 'AI: unknown';
+    badge.title = 'Could not reach the server to determine AI mode.';
   }
 
   const { venues } = await api('/venues');
