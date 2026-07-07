@@ -15,8 +15,8 @@
     "test:watch": "cross-env NODE_ENV=test node --test --watch",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"**/*.{js,json,md}\"",
-    "format:check": "prettier --check \"src/**/*.js\" \"public/**/*.js\" \"test/**/*.js\"",
+    "format": "prettier --write \"**/*.{js,mjs,json,md,css,html}\"",
+    "format:check": "prettier --check \"src/**/*.js\" \"public/**/*.js\" \"test/**/*.js\" \"e2e/**/*.mjs\" \"scripts/**/*.mjs\" \"public/**/*.css\" \"public/**/*.html\"",
     "test:e2e": "node e2e/a11y.mjs",
     "bench": "NODE_ENV=production node scripts/bench.mjs",
     "check": "npm run lint && npm run format:check && npm test"

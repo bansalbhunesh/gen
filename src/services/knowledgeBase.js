@@ -78,7 +78,8 @@ function escapeRegExp(str) {
  * keyword like "phone" does not spuriously match inside "xylophone", while
  * intentional stems like "sustainab" still match "sustainability". Matching is
  * anchored at the start of the term only, which keeps stemming behaviour.
- * @param {string} haystack @param {string} term
+ * @param {string} haystack
+ * @param {string} term
  */
 function matchesTerm(haystack, term) {
   return new RegExp(`(^|[^a-z0-9])${escapeRegExp(term)}`, 'i').test(haystack);

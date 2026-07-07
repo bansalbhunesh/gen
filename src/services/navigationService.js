@@ -31,7 +31,10 @@ export const routeCacheStats = {
 /**
  * Compute (and memoise) the deterministic part of a route: ordered steps and
  * total distance. Throws tagged HTTP errors for unknown venues/nodes/routes.
- * @param {string} venueId @param {string} from @param {string} to @param {boolean} accessibleOnly
+ * @param {string} venueId
+ * @param {string} from
+ * @param {string} to
+ * @param {boolean} accessibleOnly
  */
 function computePath(venueId, from, to, accessibleOnly) {
   const key = `${venueId}|${from}|${to}|${accessibleOnly}`;
@@ -115,7 +118,10 @@ export async function route({ venueId, from, to, accessibleOnly = false }) {
 
 /**
  * Dijkstra shortest path. Returns an ordered array of traversed edges, or null.
- * @param {object} graph @param {string} start @param {string} goal @param {boolean} accessibleOnly
+ * @param {object} graph
+ * @param {string} start
+ * @param {string} goal
+ * @param {boolean} accessibleOnly
  */
 function shortestPath(graph, start, goal, accessibleOnly) {
   /** @type {Map<string, Array<object>>} */
@@ -171,7 +177,10 @@ function shortestPath(graph, start, goal, accessibleOnly) {
   return edges;
 }
 
-/** @param {Array<object>} path @param {Map<string, object>} nodes */
+/**
+ * @param {Array<object>} path
+ * @param {Map<string, object>} nodes
+ */
 function buildSteps(path, nodes) {
   return path.map((edge) => {
     const to = nodes.get(edge.to);
@@ -198,7 +207,10 @@ function buildDirectionsPrompt(venue, steps, accessibleOnly) {
   return `${header} ${mode}\nRoute steps:\n${lines}`;
 }
 
-/** @param {Array<object>} steps @param {boolean} accessibleOnly */
+/**
+ * @param {Array<object>} steps
+ * @param {boolean} accessibleOnly
+ */
 function offlineDirections(steps, accessibleOnly) {
   const intro = accessibleOnly ? 'Here is your step-free route:' : 'Here is your route:';
   const body = steps

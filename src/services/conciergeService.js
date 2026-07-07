@@ -78,7 +78,8 @@ function offlineAnswer(matches, lang, venue) {
  * Lightweight language framing for the offline engine. Real translation is
  * handled by the model when configured; offline we annotate the language so the
  * response is still clearly labelled rather than silently English-only.
- * @param {string} text @param {string} lang
+ * @param {string} text
+ * @param {string} lang
  */
 function translateStub(text, lang) {
   if (lang === 'en') return text;

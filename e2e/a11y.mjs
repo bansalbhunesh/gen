@@ -76,7 +76,9 @@ async function main() {
 
   try {
     await page.goto(base, { waitUntil: 'networkidle' });
-    await page.addStyleTag({ content: '* { animation: none !important; transition: none !important; }' });
+    await page.addStyleTag({
+      content: '* { animation: none !important; transition: none !important; }',
+    });
     await runAxe(page, 'Concierge (initial load)');
 
     // Concierge

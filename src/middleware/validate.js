@@ -13,7 +13,11 @@ export const MAX_TEXT_LENGTH = 500;
 
 /** Error with an HTTP status and a stable, machine-readable code. */
 export class ApiError extends Error {
-  /** @param {string} message @param {number} [status] @param {string} [code] */
+  /**
+   * @param {string} message
+   * @param {number} [status]
+   * @param {string} [code]
+   */
   constructor(message, status = 400, code = 'bad_request') {
     super(message);
     this.name = 'ApiError';
@@ -32,7 +36,9 @@ export class ValidationError extends ApiError {
 
 /**
  * Require a non-empty string within the allowed length.
- * @param {unknown} value @param {string} field @param {number} [max]
+ * @param {unknown} value
+ * @param {string} field
+ * @param {number} [max]
  * @returns {string}
  */
 export function requireString(value, field, max = MAX_TEXT_LENGTH) {
@@ -48,7 +54,9 @@ export function requireString(value, field, max = MAX_TEXT_LENGTH) {
 
 /**
  * Optional string with the same safety limits.
- * @param {unknown} value @param {string} field @param {number} [max]
+ * @param {unknown} value
+ * @param {string} field
+ * @param {number} [max]
  * @returns {string|undefined}
  */
 export function optionalString(value, field, max = MAX_TEXT_LENGTH) {
@@ -58,7 +66,9 @@ export function optionalString(value, field, max = MAX_TEXT_LENGTH) {
 
 /**
  * Require a value from a fixed allow-list.
- * @param {unknown} value @param {string} field @param {ReadonlyArray<string>} allowed
+ * @param {unknown} value
+ * @param {string} field
+ * @param {ReadonlyArray<string>} allowed
  * @returns {string}
  */
 export function requireEnum(value, field, allowed) {
@@ -71,7 +81,8 @@ export function requireEnum(value, field, allowed) {
 
 /**
  * Require a finite number within an inclusive range. Accepts numeric strings.
- * @param {unknown} value @param {string} field
+ * @param {unknown} value
+ * @param {string} field
  * @param {{ min?: number, max?: number, integer?: boolean }} [opts]
  * @returns {number}
  */
@@ -95,7 +106,8 @@ export function requireNumber(
 
 /**
  * Optional number with the same range checks.
- * @param {unknown} value @param {string} field
+ * @param {unknown} value
+ * @param {string} field
  * @param {{ min?: number, max?: number, integer?: boolean }} [opts]
  * @returns {number|undefined}
  */
@@ -106,7 +118,8 @@ export function optionalNumber(value, field, opts) {
 
 /**
  * Coerce a value to a strict boolean. Missing/invalid becomes the default.
- * @param {unknown} value @param {boolean} [fallback]
+ * @param {unknown} value
+ * @param {boolean} [fallback]
  * @returns {boolean}
  */
 export function toBoolean(value, fallback = false) {
@@ -119,7 +132,8 @@ export function toBoolean(value, fallback = false) {
 /**
  * Optional array of short strings, bounded in both count and per-item length.
  * Non-string entries are dropped.
- * @param {unknown} value @param {string} field
+ * @param {unknown} value
+ * @param {string} field
  * @param {{ maxItems?: number, maxItemLength?: number }} [opts]
  * @returns {string[]|undefined}
  */
