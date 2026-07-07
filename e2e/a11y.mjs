@@ -76,6 +76,7 @@ async function main() {
 
   try {
     await page.goto(base, { waitUntil: 'networkidle' });
+    await page.addStyleTag({ content: '* { animation: none !important; transition: none !important; }' });
     await runAxe(page, 'Concierge (initial load)');
 
     // Concierge
@@ -115,18 +116,21 @@ async function main() {
     await page.click('#tab-announce');
     await page.click('#announce-form button[type=submit]');
     await page.waitForSelector('#announce-output .ann-item');
+    await page.waitForSelector('#announce-output[aria-busy="false"]');
     await runAxe(page, 'Announce (multilingual)');
 
     // Green travel
     await page.click('#tab-green');
     await page.click('#green-form button[type=submit]');
     await page.waitForSelector('#green-output .rank li.best');
+    await page.waitForSelector('#green-output[aria-busy="false"]');
     await runAxe(page, 'Green travel (ranked)');
 
     // Match plan
     await page.click('#tab-plan');
     await page.click('#plan-form button[type=submit]');
     await page.waitForSelector('#plan-output');
+    await page.waitForSelector('#plan-output[aria-busy="false"]');
     await runAxe(page, 'Match plan');
 
     // Translate
@@ -134,6 +138,7 @@ async function main() {
     await page.fill('#translate-text', 'Gate C is now open.');
     await page.click('#translate-form button[type=submit]');
     await page.waitForSelector('#translate-output h3');
+    await page.waitForSelector('#translate-output[aria-busy="false"]');
     await runAxe(page, 'Translate');
 
     // Re-scan key panels under the dark colour scheme to catch theme-specific
