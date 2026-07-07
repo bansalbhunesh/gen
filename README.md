@@ -137,6 +137,7 @@ Node.js 20+ · Express · Helmet · express-rate-limit · compression · Anthrop
 
 ## Documentation
 
+- [`docs/DEPLOY.md`](docs/DEPLOY.md) — hosting options (Docker/Render/Vercel) & environment variables
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — layers, the AI gateway pattern, algorithms
 - [`docs/ALIGNMENT.md`](docs/ALIGNMENT.md) — problem-statement coverage matrix (areas × personas)
 - [`docs/ACCESSIBILITY.md`](docs/ACCESSIBILITY.md) — WCAG approach & automated checks

@@ -25,7 +25,14 @@ export default [
   { ignores: ['node_modules/**', 'coverage/**', 'docs/**'] },
   js.configs.recommended,
   {
-    files: ['src/**/*.js', 'test/**/*.js', 'e2e/**/*.mjs', 'scripts/**/*.mjs', '*.config.js'],
+    files: [
+      'src/**/*.js',
+      'api/**/*.js',
+      'test/**/*.js',
+      'e2e/**/*.mjs',
+      'scripts/**/*.mjs',
+      '*.config.js',
+    ],
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: 'module',
