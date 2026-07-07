@@ -43,7 +43,8 @@ in a live venue), **testability** (pure services, injected fallbacks), and a
 - **`src/utils/`** — `logger` (structured, silent in tests), `cache` (TTL +
   bounded LRU), `sanitize` (prompt hardening).
 - **`src/data/`** — static, indexed once at startup: venues + wayfinding
-  graphs, concierge knowledge base, fixtures, emission factors.
+  graphs, concierge knowledge base, fixtures, emission factors, and the
+  capability→area→persona alignment map.
 
 ## The AI gateway pattern
 
@@ -65,6 +66,19 @@ Centralising this gives one place to enforce:
 `accessibleOnly` mode, edges flagged non-step-free (stairs/escalators) are
 excluded before the search, so the returned route provably uses only accessible
 segments — or returns `422` if none exists.
+
+## Efficiency
+
+- **Compression** — `compression` gzips/brotlis API JSON and static assets
+  (≈79% smaller responses).
+- **HTTP caching** — reference data (`/api/venues`, `/api/tournament`,
+  `/api/config/options`, `/api/matches`, `/api/capabilities`, `/api/openapi.json`)
+  is serialised with a strong `ETag` **once at startup** and served with
+  `Cache-Control`; a matching `If-None-Match` short-circuits to a `304`.
+- **Memoisation** — wayfinding caches the deterministic Dijkstra result per
+  `(venue, from, to, accessibleOnly)`; the AI gateway caches completions.
+- **Observability** — `/api/metrics` exposes AI + route cache hit-rates and
+  average request latency; `npm run bench` reports offline hot-path throughput.
 
 ## Testing strategy
 

@@ -177,6 +177,9 @@ async function initData() {
   $('#announce-scenario').innerHTML = cfg.announcementScenarios
     .map((s) => `<option value="${s}">${s.replace(/-/g, ' ')}</option>`)
     .join('');
+  $('#briefing-role').innerHTML = (cfg.briefingRoles || [])
+    .map((r) => `<option value="${r.id}">${escape(r.label)}</option>`)
+    .join('');
 
   // Announcement language chips (multi-select).
   $('#announce-langs').innerHTML = cfg.languages
@@ -310,6 +313,29 @@ function initIncident() {
   });
 }
 
+function initBriefing() {
+  onSubmit('#briefing-form', '#briefing-output', async (out) => {
+    const result = await api('/briefing', {
+      method: 'POST',
+      body: JSON.stringify({
+        role: $('#briefing-role').value,
+        venueId: $('#crowd-venue').value || undefined,
+        zone: $('#briefing-zone').value || undefined,
+        shift: $('#briefing-shift').value || undefined,
+      }),
+    });
+    const duties = result.duties.map((d) => `<li>${escape(d)}</li>`).join('');
+    showResult(
+      out,
+      `<h3>${escape(result.roleLabel)} briefing</h3>` +
+        `<p>${escape(result.briefing)}</p>` +
+        `<h3>Key duties</h3><ul class="action-list">${duties}</ul>` +
+        `<p class="meta">Escalation: ${escape(result.escalation)}</p>` +
+        sourceBadge(result.source),
+    );
+  });
+}
+
 function initAnnounce() {
   onSubmit('#announce-form', '#announce-output', async (out) => {
     const languages = $$('#announce-langs .chip[aria-pressed="true"]').map((c) => c.dataset.lang);
@@ -410,6 +436,7 @@ initConcierge();
 initNavigate();
 initCrowd();
 initIncident();
+initBriefing();
 initAnnounce();
 initGreen();
 initPlan();

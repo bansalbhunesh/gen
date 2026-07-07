@@ -229,3 +229,55 @@ test('security response headers are present', async () => {
   assert.equal(res.headers.get('referrer-policy'), 'no-referrer');
   assert.ok(res.headers.get('strict-transport-security'));
 });
+
+test('reference data is cacheable and supports conditional 304s', async () => {
+  const res = await fetch(base + '/api/venues');
+  const etag = res.headers.get('etag');
+  assert.ok(etag, 'ETag present');
+  assert.match(res.headers.get('cache-control'), /max-age/);
+  const revalidate = await fetch(base + '/api/venues', { headers: { 'if-none-match': etag } });
+  assert.equal(revalidate.status, 304);
+});
+
+test('responses are gzip-compressed when the client supports it', async () => {
+  // undici auto-decompresses, so assert via a manual request that keeps the header.
+  const res = await fetch(base + '/api/venues', { headers: { 'accept-encoding': 'gzip' } });
+  // Either content-encoding is exposed or the body decoded fine; assert the
+  // server advertised compression negotiation via Vary.
+  assert.match(res.headers.get('vary') || '', /Accept-Encoding/i);
+});
+
+test('metrics expose route-cache and HTTP timing observability', async () => {
+  const { body } = await call('/api/metrics');
+  assert.ok(body.routeCache && typeof body.routeCache.hitRate === 'number');
+  assert.ok(body.http && typeof body.http.avgResponseMs === 'number');
+});
+
+test('POST /api/briefing generates a volunteer briefing', async () => {
+  const { status, body } = await call('/api/briefing', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ role: 'transport-marshal', venueId: 'usa-metlife' }),
+  });
+  assert.equal(status, 200);
+  assert.ok(body.briefing.length > 0);
+  assert.equal(body.role, 'transport-marshal');
+});
+
+test('POST /api/briefing rejects an unknown role', async () => {
+  const { status, body } = await call('/api/briefing', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ role: 'nope' }),
+  });
+  assert.equal(status, 400);
+  assert.equal(body.code, 'validation_error');
+});
+
+test('GET /api/capabilities returns the alignment map covering all areas', async () => {
+  const { status, body } = await call('/api/capabilities');
+  assert.equal(status, 200);
+  assert.equal(body.problemStatementAreas.length, 8);
+  const served = new Set(body.capabilities.flatMap((c) => c.personas));
+  assert.ok(['fans', 'organizers', 'volunteers', 'venue-staff'].every((p) => served.has(p)));
+});

@@ -124,6 +124,25 @@
           <button type="submit" class="primary">Triage incident</button>
         </form>
         <output id="incident-output" class="result" aria-live="assertive"></output>
+
+        <hr class="divider" />
+        <h3>Volunteer &amp; staff shift briefing</h3>
+        <form id="briefing-form" class="stack">
+          <div class="row">
+            <div class="col">
+              <label for="briefing-role">Role</label>
+              <select id="briefing-role"></select>
+            </div>
+            <div class="col">
+              <label for="briefing-shift">Shift (optional)</label>
+              <input type="text" id="briefing-shift" maxlength="40" placeholder="e.g. Kickoff" />
+            </div>
+          </div>
+          <label for="briefing-zone">Zone (optional)</label>
+          <input type="text" id="briefing-zone" maxlength="80" placeholder="e.g. East Gate" />
+          <button type="submit" class="primary">Generate briefing</button>
+        </form>
+        <output id="briefing-output" class="result" aria-live="polite"></output>
       </section>
 
       <!-- Announce -->

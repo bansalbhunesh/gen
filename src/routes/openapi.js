@@ -58,6 +58,16 @@ export const openapi = {
     '/announce': {
       post: { summary: 'Multilingual PA announcement', requestBody: body([]), responses: ok() },
     },
+    '/briefing': {
+      post: {
+        summary: 'Volunteer & staff shift briefing',
+        requestBody: body(['role']),
+        responses: ok(),
+      },
+    },
+    '/capabilities': {
+      get: { summary: 'Capability → GenAI area → persona alignment map', responses: ok() },
+    },
     '/plan/{venueId}': {
       get: { summary: 'AI match-day plan', parameters: [pathParam('venueId')], responses: ok() },
     },

@@ -103,6 +103,12 @@ async function main() {
     assert.equal((await page.textContent('#incident-output .pill')).trim(), 'P1');
     await runAxe(page, 'Crowd & Ops (incident triaged)');
 
+    // Volunteer briefing (same panel)
+    await page.selectOption('#briefing-role', 'accessibility-host');
+    await page.click('#briefing-form button[type=submit]');
+    await page.waitForSelector('#briefing-output h3');
+    await runAxe(page, 'Crowd & Ops (volunteer briefing)');
+
     // Announce
     await page.click('#tab-announce');
     await page.click('#announce-form button[type=submit]');

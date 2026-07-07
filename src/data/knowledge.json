@@ -15,19 +15,51 @@
     {
       "id": "accessibility",
       "topic": "accessibility",
-      "keywords": ["accessible", "wheelchair", "disability", "sensory", "hearing", "vision", "companion", "ada", "step-free"],
+      "keywords": [
+        "accessible",
+        "wheelchair",
+        "disability",
+        "sensory",
+        "hearing",
+        "vision",
+        "companion",
+        "ada",
+        "step-free"
+      ],
       "answer": "Every venue offers step-free routes, accessible seating, companion seats, and elevators. Sensory rooms and noise-cancelling kits are available for guests with sensory sensitivities. Audio-descriptive commentary headsets can be collected at Guest Services near the main gate. Ask staff in a purple vest for assistance at any time."
     },
     {
       "id": "transport",
       "topic": "transportation",
-      "keywords": ["transport", "parking", "train", "metro", "bus", "shuttle", "uber", "drive", "transit", "rideshare"],
+      "keywords": [
+        "transport",
+        "parking",
+        "train",
+        "metro",
+        "bus",
+        "shuttle",
+        "uber",
+        "drive",
+        "transit",
+        "rideshare"
+      ],
       "answer": "Public transit is strongly recommended — dedicated match-day shuttles and extended metro/train services run to every venue. Rideshare pick-up/drop-off is at signposted lots away from pedestrian gates. If you must drive, pre-book parking; walk-up parking is extremely limited and roads close near the stadium 2 hours before kickoff."
     },
     {
       "id": "food",
       "topic": "food",
-      "keywords": ["food", "eat", "drink", "restaurant", "hungry", "vegan", "halal", "kosher", "comida", "concession"],
+      "keywords": [
+        "food",
+        "eat",
+        "drink",
+        "restaurant",
+        "hungry",
+        "vegan",
+        "halal",
+        "kosher",
+        "comida",
+        "concession"
+      ],
       "answer": "Concourses have concessions on every level with vegetarian, vegan, halal and gluten-free options clearly labelled. Mobile order-ahead is available in the official app to skip lines. Free water refill stations are located next to every restroom block to reduce single-use plastic."
     },
     {
@@ -45,7 +77,16 @@
     {
       "id": "sustainability",
       "topic": "sustainability",
-      "keywords": ["recycle", "sustainab", "waste", "green", "environment", "reusable", "carbon", "bottle"],
+      "keywords": [
+        "recycle",
+        "sustainab",
+        "waste",
+        "green",
+        "environment",
+        "reusable",
+        "carbon",
+        "bottle"
+      ],
       "answer": "FIFA World Cup 2026 venues run colour-coded recycling and compost stations throughout the concourses. Bring an empty reusable bottle and use the free refill stations. Choosing transit or the shuttle over driving is the single biggest way fans can cut their match-day carbon footprint."
     },
     {

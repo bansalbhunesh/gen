@@ -21,6 +21,7 @@ const venuesData = load('venues.json');
 const knowledgeData = load('knowledge.json');
 const scheduleData = load('schedule.json');
 const sustainabilityData = load('sustainability.json');
+const capabilitiesData = load('capabilities.json');
 
 const venuesById = new Map(venuesData.venues.map((v) => [v.id, v]));
 
@@ -31,6 +32,7 @@ export const knowledgeEntries = knowledgeData.entries;
 export const matches = scheduleData.matches;
 export const emissionModes = sustainabilityData.modes;
 export const sustainabilityTips = sustainabilityData.tips;
+export const capabilities = capabilitiesData;
 
 /** @param {string} id */
 export function getVenue(id) {

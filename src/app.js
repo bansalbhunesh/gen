@@ -9,12 +9,14 @@
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import compression from 'compression';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 import config from './config.js';
 import apiRouter from './routes/index.js';
 import { requestId } from './middleware/requestId.js';
+import { timing } from './middleware/timing.js';
 import { generalLimiter, aiLimiter, requireJson } from './middleware/security.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 
@@ -28,6 +30,7 @@ const AI_PATHS = [
   '/api/sustainability/footprint',
   '/api/incident',
   '/api/announce',
+  '/api/briefing',
   '/api/plan',
   '/api/crowd',
 ];
@@ -41,8 +44,12 @@ export function createApp() {
   app.disable('x-powered-by');
   app.disable('etag'); // API responses are dynamic; avoid stale 304s.
 
-  // Correlate every request/response with an id.
+  // Correlate every request/response with an id and time each request.
   app.use(requestId);
+  app.use(timing);
+
+  // Compress responses (JSON + static assets) when the client supports it.
+  app.use(compression());
 
   // --- Security headers ---------------------------------------------------
   app.use(

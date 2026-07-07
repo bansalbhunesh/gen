@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { route } from '../src/services/navigationService.js';
+import { route, routeCacheStats, _resetRouteCache } from '../src/services/navigationService.js';
 
 test('computes a route with steps, distance and walk estimate', async () => {
   const res = await route({ venueId: 'usa-metlife', from: 'gate-a', to: 'sec-115' });
@@ -43,6 +43,25 @@ test('finds the shortest of multiple possible paths', async () => {
   const res = await route({ venueId: 'usa-metlife', from: 'restroom-1', to: 'food-1' });
   // restroom-1 -> concourse-lower -> food-1 == 25 + 35
   assert.equal(res.totalDistanceMeters, 60);
+});
+
+test('memoises identical route computations (Dijkstra runs once)', async () => {
+  _resetRouteCache();
+  const args = { venueId: 'usa-metlife', from: 'gate-a', to: 'sec-320', accessibleOnly: true };
+  const first = await route(args);
+  const second = await route(args);
+  assert.equal(routeCacheStats.misses, 1, 'path computed once');
+  assert.equal(routeCacheStats.hits, 1, 'second call served from cache');
+  assert.deepEqual(first.steps, second.steps);
+  assert.equal(first.totalDistanceMeters, second.totalDistanceMeters);
+});
+
+test('different route parameters are cached separately', async () => {
+  _resetRouteCache();
+  await route({ venueId: 'usa-metlife', from: 'gate-a', to: 'sec-115' });
+  await route({ venueId: 'usa-metlife', from: 'gate-a', to: 'food-1' });
+  assert.equal(routeCacheStats.size, 2);
+  assert.equal(routeCacheStats.hits, 0);
 });
 
 test('wayfinding is available at the additional venues', async () => {

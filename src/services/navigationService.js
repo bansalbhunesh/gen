@@ -11,10 +11,37 @@ import { generate } from './aiService.js';
 import { getZoneGraph, getVenue } from './knowledgeBase.js';
 
 /**
- * @param {{ venueId: string, from: string, to: string, accessibleOnly?: boolean }} input
- * @returns {Promise<object>}
+ * Memoised graph computations. Venue maps are static, so a given
+ * (venue, from, to, accessibleOnly) always yields the same path — there is no
+ * reason to re-run Dijkstra on a repeated query. Bounded to avoid unbounded
+ * growth. Only the deterministic path is cached; natural-language directions
+ * still flow through the AI gateway (which has its own cache).
  */
-export async function route({ venueId, from, to, accessibleOnly = false }) {
+const routeCache = new Map();
+const ROUTE_CACHE_MAX = 500;
+
+export const routeCacheStats = {
+  get size() {
+    return routeCache.size;
+  },
+  hits: 0,
+  misses: 0,
+};
+
+/**
+ * Compute (and memoise) the deterministic part of a route: ordered steps and
+ * total distance. Throws tagged HTTP errors for unknown venues/nodes/routes.
+ * @param {string} venueId @param {string} from @param {string} to @param {boolean} accessibleOnly
+ */
+function computePath(venueId, from, to, accessibleOnly) {
+  const key = `${venueId}|${from}|${to}|${accessibleOnly}`;
+  const cached = routeCache.get(key);
+  if (cached) {
+    routeCacheStats.hits++;
+    return cached;
+  }
+  routeCacheStats.misses++;
+
   const graph = getZoneGraph(venueId);
   if (!graph) {
     const err = new Error(`No wayfinding map available for venue "${venueId}"`);
@@ -42,6 +69,26 @@ export async function route({ venueId, from, to, accessibleOnly = false }) {
 
   const steps = buildSteps(path, nodes);
   const totalDistance = path.reduce((sum, edge) => sum + (edge.distance || 0), 0);
+  const result = { steps, totalDistance };
+
+  if (routeCache.size >= ROUTE_CACHE_MAX) routeCache.delete(routeCache.keys().next().value);
+  routeCache.set(key, result);
+  return result;
+}
+
+/** Test/ops helper. */
+export function _resetRouteCache() {
+  routeCache.clear();
+  routeCacheStats.hits = 0;
+  routeCacheStats.misses = 0;
+}
+
+/**
+ * @param {{ venueId: string, from: string, to: string, accessibleOnly?: boolean }} input
+ * @returns {Promise<object>}
+ */
+export async function route({ venueId, from, to, accessibleOnly = false }) {
+  const { steps, totalDistance } = computePath(venueId, from, to, accessibleOnly);
   const venue = getVenue(venueId);
 
   const { text, source } = await generate({
@@ -163,4 +210,4 @@ function offlineDirections(steps, accessibleOnly) {
   return `${intro} ${body} You have arrived. Ask any steward in a purple vest if you need help.`;
 }
 
-export default { route };
+export default { route, routeCacheStats, _resetRouteCache };

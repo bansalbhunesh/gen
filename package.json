@@ -18,6 +18,7 @@
     "format": "prettier --write \"**/*.{js,json,md}\"",
     "format:check": "prettier --check \"src/**/*.js\" \"public/**/*.js\" \"test/**/*.js\"",
     "test:e2e": "node e2e/a11y.mjs",
+    "bench": "NODE_ENV=production node scripts/bench.mjs",
     "check": "npm run lint && npm run format:check && npm test"
   },
   "keywords": [
@@ -33,6 +34,7 @@
   "author": "StadiumIQ Team",
   "license": "MIT",
   "dependencies": {
+    "compression": "^1.8.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.2",
